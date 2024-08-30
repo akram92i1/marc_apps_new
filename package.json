@@ -5,6 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --watch backend --exec node backend/server.js",
+    "start:dev": "nodemon --watch backend --exec nodemon backend/server.js",
     "server": "node backend/server.js",
     "client": "npm start --prefix projectManager",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --force --prefix projectManager && npm install --force --prefix backend && npm run build --prefix projectManager"
