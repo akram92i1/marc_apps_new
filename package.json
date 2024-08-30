@@ -1,0 +1,23 @@
+{
+  "name": "semerlepresent",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --watch backend --exec node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "npm start --prefix projectManager",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --force --prefix projectManager && npm run build --prefix projectManager"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "engines": {
+    "node": "20.17.0",
+    "npm": "9.0.0"
+  },
+  "dependencies": {
+    "semerlepresent": "file:"
+  }
+}

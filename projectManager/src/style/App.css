@@ -1,0 +1,34 @@
+/* Add this to your App.css file */
+
+body {
+
+  background-color: #f5f5f5; /* Soft gray background */
+  background-image: none; /* Remove background image */
+  background-size: initial; /* Reset background size */
+  background-position: initial; /* Reset background position */
+  background-attachment: initial; /* Reset background attachment */
+  backdrop-filter: none; /* Remove blur effect */
+  }
+  .login-container {
+    position: fixed; /* Change to fixed positioning */
+    top: 50%; /* Adjust the top position */
+    left: 50%; /* Adjust the left position */
+    transform: translate(-50%, -50%); /* Keep the container centered */
+    background-color: #fff; /* Keep the white background */
+    padding: 20px; /* Keep the padding */
+    border: 1px solid #000000; /* Keep the border */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Keep the box shadow */
+    width: 35vw; /* Adjust the width to 35% of the viewport width */
+    max-width: 500px; /* Adjust the maximum width */
+    margin: 20px auto; /* Keep the margin */
+    padding-bottom: 20px; /* Keep the padding bottom */
+  }
+  @media (max-width: 600px) {
+    /* Apply styles here to make the app look good on smaller screens */
+    .login-container {
+      width: 100%; /* Make the login container full width */
+      padding: 10px; /* Reduce padding */
+      font-size: 16px; /* Reduce font size */
+    }
+    /* Add other styles as needed */
+  }
