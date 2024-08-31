@@ -28,7 +28,7 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
         const decoded = jwtDecode(token);
         const userId = decoded.user.id;
         try {
-          const response = await axios.get(`http://127.0.0.1:5000/api/users/${userId}/finishedEvents`, {
+          const response = await axios.get(`https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/${userId}/finishedEvents`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -54,7 +54,7 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
       const userId = decoded.user.id;
       console.log("User ID:", userId);
       try {
-        await axios.post(`http://127.0.0.1:5000/api/users/${userId}/finishedEvents`, {
+        await axios.post(`https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/${userId}/finishedEvents`, {
           taskId: selectedEvent,
           month: selectedEventMonth
         }, {
