@@ -27,7 +27,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 // MongoDB Connection
-mongoose.connect('mongodb://127.0.0.1:27017/marc-database', { useNewUrlParser: true, useUnifiedTopology: true })
+const url = `mongodb+srv://admin:${process.env.MONGO_PASSWORD}@marcdatabase.rcgfo.mongodb.net/marc-database?retryWrites=true&w=majority`; 
+mongoose.connect( url , { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
