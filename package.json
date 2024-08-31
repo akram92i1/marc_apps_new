@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --watch backend --exec node backend/server.js",
+    "start": "node  backend --exec node backend/server.js",
     "start:dev": "nodemon --watch backend --exec nodemon backend/server.js",
     "server": "node backend/server.js",
     "client": "npm start --prefix projectManager",

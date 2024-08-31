@@ -27,10 +27,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 // MongoDB Connection
-const url = `mongodb+srv://admin:${process.env.MONGO_PASSWORD}@marcdatabase.rcgfo.mongodb.net/marc-database?retryWrites=true&w=majority`; 
+const url = process.env.MONGO_URI; 
 mongoose.connect( url , { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+  .catch(err => console.log('MongoDB connection error ----> :', err));
 
   
 // Routes
