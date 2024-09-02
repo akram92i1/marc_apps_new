@@ -1,12 +1,17 @@
 /* Add this to your App.css file */
 
 body {
-
+  background-image: url("../login.jpg"); /* Replace with your image path */
+  background-size: cover; /* Ensure the image covers the entire background */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  background-attachment: fixed; /* Keep the background image static */
+  background-position: center; /* Center the image */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+  height: 100vh; /* Make sure the body covers the full viewport height */
+  width: 100vw; /* Make sure the body covers the full viewport width */
   background-color: #f5f5f5; /* Soft gray background */
   background-image: none; /* Remove background image */
-  background-size: initial; /* Reset background size */
-  background-position: initial; /* Reset background position */
-  background-attachment: initial; /* Reset background attachment */
   backdrop-filter: none; /* Remove blur effect */
   }
   .login-container {

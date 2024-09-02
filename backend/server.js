@@ -10,18 +10,12 @@ console.log('JWT_SECRET:', process.env.JWT_SECRET); // Debug log
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
-// app.get('/*', (req, res) => { 
-//   res.sendFile(path.join(__dirname, '../build/index.html'),
-//   function(err){
-//   if(err){
-//     res.status(500).send(err)
-//   } 
-//   });
-// });
+ app.get('/*', (req, res) => {    res.sendFile(path.join(__dirname, '../build/index.html'),   function(err){   if(err){
+    res.status(500).send(err)
+  }    }); });
 
 app.use(cors({
-  origin: 'https://www.semerlepresent.ca/',
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
