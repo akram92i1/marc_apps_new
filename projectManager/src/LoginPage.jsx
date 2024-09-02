@@ -49,7 +49,7 @@ const LoginPage = ({handleClickOpenSignup}) => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Login
           </Typography>
           {error && <Alert severity = "error">{error}</Alert>}
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
