@@ -1,19 +1,11 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const path = require('path');
 const cors = require('cors');
 const userRoutes = require('./routes/user');
-const messsageRoutes = require("./routes/message.routes")
-const cookieParser = require('cookie-parser');
-require('dotenv').config();
-
-console.log('JWT_SECRET:', process.env.JWT_SECRET); // Debug log
-
+const messsageRoutes = require('./routes/message.routes');
 const app = express();
-const PORT = process.env.PORT || 5000;
- app.get('/*', (req, res) => {    res.sendFile(path.join(__dirname, '../build/index.html'),   function(err){   if(err){
-    res.status(500).send(err)
-  }    }); });
 
+// CORS Middleware
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -21,21 +13,25 @@ app.use(cors({
 }));
 
 // Middleware
-app.use(cors());
 app.use(express.json());
-app.use(cookieParser());
 
-// MongoDB Connection
-mongoose.connect( `mongodb+srv://admin:Tbm930antonov2@marcdatabase.rcgfo.mongodb.net/marc-database?retryWrites= &w=majority` , { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB connection error ----> :', err));
+// Serve static files from the React app's build folder
+app.use(express.static(path.join(__dirname, '../build')));
 
-  
-// Routes
+// API Routes
 app.use('/api/users', userRoutes);
-app.use('/api/messages' , messsageRoutes) ; 
+app.use('/api/messages', messsageRoutes);
 
-// Start the Server
+// Wildcard route to serve the React app for any unmatched routes
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'), function(err) {
+    if (err) {
+      res.status(500).send(err);
+    }
+  });
+});
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

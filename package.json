@@ -8,7 +8,7 @@
     "start:dev": "nodemon --watch backend --exec nodemon backend/server.js",
     "server": "node backend/server.js",
     "client": "npm start --prefix projectManager",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --force --prefix projectManager && npm run build --prefix projectManager"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --force --prefix projectManager &&c"
   },
   "keywords": [],
   "author": "",
