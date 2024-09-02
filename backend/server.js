@@ -20,6 +20,11 @@ const PORT = process.env.PORT || 5000;
 //   });
 // });
 
+app.use(cors({
+  origin: 'https://www.semerlepresent.ca/',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Middleware
 app.use(cors());
@@ -27,7 +32,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // MongoDB Connection
-mongoose.connect( `mongodb+srv://admin:Tbm930antonov2@marcdatabase.rcgfo.mongodb.net/marc-database?retryWrites=true&w=majority` , { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect( `mongodb+srv://admin:Tbm930antonov2@marcdatabase.rcgfo.mongodb.net/marc-database?retryWrites= &w=majority` , { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log('MongoDB connection error ----> :', err));
 
