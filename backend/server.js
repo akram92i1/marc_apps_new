@@ -38,7 +38,7 @@ mongoose.connect(`mongodb+srv://admin:Tbm930antonov2@marcdatabase.rcgfo.mongodb.
 
 // Wildcard route to serve the React app for any unmatched routes
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build/index.html'), function(err) {
+  res.sendFile(path.join(__dirname, '../projectManager/build/index.html'), function(err) {
     if (err) {
       res.status(500).send(err);
     }
