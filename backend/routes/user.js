@@ -7,60 +7,28 @@ require('dotenv').config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Middleware to verify token
+
+//middleware to verify token    
 const auth = (req, res, next) => {
-  const token = req.header('Authorization') && req.header('Authorization').split(' ')[1];
-  if (!token) {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  const verifiedToken = verifiedToken(token , {returnPayload:true})
+  if (!verifiedToken) {
     return res.status(401).json({ msg: 'No token, authorization denied' });
   }
+  console.log("verifiedToken" , verifiedToken)
+    req.user = verifiedToken.user;s
+    next();
+  };
 
+const verifiedToken = async (token , options=undefined) => {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded.user;
-    next();
+    return options?.returnPayload ? decoded : true;
   } catch (err) {
-    res.status(401).json({ msg:  'Token is not valid' });
+    return false;
   }
-};
+}
 
-// Sign up route
-router.post('/signup', async (req, res) => {
-  const { username, email, password } = req.body;
-  try {
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ msg: 'User already exists' });
-    }
-
-    const boyrofilePicture = `https://avatar.iran.liara.run/public/boy?username={username}`
-    user = new User({
-      username,
-      email,
-      password,
-      profilePic: boyrofilePicture
-    });
-
-    ///const salt = await bcrypt.genSalt(10);
-    //user.password = await bcrypt.hash(password, salt);
-
-    await user.save();
-
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
-
-    jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-      if (err) throw err;
-      res.status(201).json({ token }); 
-    });
-
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
-  }
-});
 
 //get all events for each user 
 router.get('/:userId/allUsersEvents', auth, async (req, res) => {
@@ -95,37 +63,47 @@ router.post("/:userId/AllUserInformation" , auth , async (req , res)=>{
   }
 })
 // Login route
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  console.log("email" , email);
-  console.log("password" , password); 
-  try {
-    let user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ msg: 'Invalid credentials' });
-    }
+// Login route
+// router.post('/login', async (req, res) => {
+//   // Extract email and password from request body
+//   const { email, password } = req.body;
+//   console.log("email" , email);
+//   console.log("password" , password); 
+//   try {
+//     // Find user by email
+//     let user = await User.findOne({ email });
+//     if (!user) {
+//       // If user not found, return invalid credentials message
+//       return res.status(400).json({ msg: 'Invalid credentials' });
+//     }
 
-    const isMatch = password == user.password;
-    if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid credentials' });
-    }
+//     // Check if password matches (Note: This is not secure, should use bcrypt)
+//     const isMatch = password == user.password;
+//     if (!isMatch) {
+//       // If password doesn't match, return invalid credentials message
+//       return res.status(400).json({ msg: 'Invalid credentials' });
+//     }
 
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
+//     // Create payload for JWT
+//     const payload = {
+//       user: {
+//         id: user.id,
+//       },
+//     };
 
-    jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-      if (err) throw err;
-      res.json({ token });
-    });
+//     // Sign JWT
+//     jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+//       if (err) throw err;
+//       // Send token in response
+//       res.json({ token });
+//     });
 
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send( {message:'Server error'});
-  }
-});
+//   } catch (err) {
+//     // Log error and send server error message
+//     console.error(err.message);
+//     res.status(500).send( {message:'Server error'});
+//   }
+// });
 
 // Add an event
 router.post('/:userId/events', auth, async (req, res) => {

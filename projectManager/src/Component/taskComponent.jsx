@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Card, Avatar, Divider, Box, Typography, CardHeader, Popover, IconButton, makeStyles } from "@mui/material";
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -10,7 +10,7 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedEventMonth, setSelectedEventMonth] = useState(null);
   const TaskState = ["Tache effectue", "Tache supprime"];
-
+  const [token, setToken] = useState();
   const handleSettingsClick = (event, eventId, eventEndDate) => {
     setAnchorEl(event.currentTarget);
     setSelectedEvent(eventId);
@@ -23,27 +23,35 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
 
   useEffect(() => {
     const fetchNewFinishedEvents = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        const decoded = jwtDecode(token);
-        const userId = decoded.user.id;
-        try {
-          const response = await axios.get(`https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/${userId}/finishedEvents`, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
-          setFinishedEvents(response.data);
-        } catch (error) {
-          console.log("Error:", error);
-        }
+      try {
+        const response = await axios.get('https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/finishedEvents', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+  
+        setToken(response.data.token);
+        setFinishedEvents(response.data);
+      } catch (error) {
+        console.error("Error fetching finished events:", error);
       }
     };
+  
     fetchNewFinishedEvents();
     console.log("Component has changed");
   }, [allEvents]);
+  
 
-
+  useLayoutEffect(() => {
+    const authInterceptor = axios.interceptors.request.use(config => {  
+      config.headers.Authorization = 
+      !config._retry && token ? `Bearer ${token}`
+      : config.headers.Authorization;
+      return config;});
+      return () => { 
+        axios.interceptors.request.eject(authInterceptor);
+      };
+  }, [token]);
 
   const handleTasktClick = async () => {
     console.log("----- Change the state of an event ------");

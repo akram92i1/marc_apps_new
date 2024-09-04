@@ -3,6 +3,7 @@ const path = require('path');
 const cors = require('cors');
 const userRoutes = require('./routes/user');
 const messsageRoutes = require('./routes/message.routes');
+const authRoutes = require('./routes/auth');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const app = express();
@@ -11,12 +12,26 @@ require('dotenv').config();
 
 console.log('JWT_SECRET:', process.env.JWT_SECRET); // Debug log
 // CORS Middleware
+// Configure CORS middleware
 app.use(cors({
-  origin: '*',
+  origin: function (origin, callback) {
+    // Allow requests from these origins
+    const allowedOrigins = ['http://localhost:3000', 'https://www.semerlepresent.net'];
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      console.log('---> CORS request from:', origin); // Debug log
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  // Allow specific HTTP methods
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  // Allow specific headers
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true  // If you are using cookies or Authorization header
+  credentials: true  // Enable sending cookies and Authorization header
 }));
+
+// Enable pre-flight requests for all routes
 app.options('*', cors()); 
 // Middleware
 app.use(express.json());
@@ -27,6 +42,7 @@ app.use(express.static(path.join(__dirname, '../build')));
 // API Routes
 app.use('/api/users', userRoutes);
 app.use('/api/messages', messsageRoutes);
+app.use('/api/auth', authRoutes);
 
 // MongoDB Connection
 mongoose.connect(`mongodb+srv://admin:Tbm930antonov2@marcdatabase.rcgfo.mongodb.net/marc-database?retryWrites=true&w=majority`, {
