@@ -37,12 +37,10 @@ mongoose.connect(`mongodb+srv://admin:Tbm930antonov2@marcdatabase.rcgfo.mongodb.
 .catch(err => console.log('MongoDB connection error:', err));
 
 // Wildcard route to serve the React app for any unmatched routes
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../projectManager/build/index.html'), function(err) {
-    if (err) {
-      res.status(500).send(err);
-    }
-  });
+const reactApp = path.join(__dirname, "projectManager" , "build"); 
+app.use(express.static(reactApp));
+app.get('*', (req, res) => {  
+  res.sendFile(path.join(reactApp, 'index.html'));
 });
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
