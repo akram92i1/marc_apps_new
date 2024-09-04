@@ -12,7 +12,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true  // If you are using cookies or Authorization header
 }));
-
+app.options('*', cors()); 
 // Middleware
 app.use(express.json());
 
