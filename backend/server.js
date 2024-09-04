@@ -16,7 +16,7 @@ console.log('JWT_SECRET:', process.env.JWT_SECRET); // Debug log
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests from these origins
-    const allowedOrigins = ['http://localhost:3000', 'https://semerlepresent2-c1afa04ef3e6.herokuapp.com'];
+    const allowedOrigins = ['http://localhost:3000', 'https://semerlepresent2-c1afa04ef3e6.herokuapp.com' , 'https://semerlepresent.net'];
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       console.log('---> CORS request from:', origin); // Debug log
       callback(null, true);
