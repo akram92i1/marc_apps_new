@@ -13,12 +13,23 @@ require('dotenv').config();
 console.log('JWT_SECRET:', process.env.JWT_SECRET); // Debug log
 // CORS Middleware
 // Configure CORS middleware
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://www.semerlepresent.net'/);
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-})
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests from these origins
+    const allowedOrigins = ['http://localhost:3000', 'https://semerlepresent2-c1afa04ef3e6.herokuapp.com' , 'https://www.semerlepresent.net'];
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      console.log('---> CORS request from:', origin); // Debug log
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  // Allow specific HTTP methods
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  // Allow specific headers
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true  // Enable sending cookies and Authorization header
+}));
 
 // Enable pre-flight requests for all routes
 app.options('*', cors()); 
