@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node  backend --exec node backend/server.js",
-    "heroku-postbuild": "npm install --prefix projectManager && npm run build --prefix projectManager"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false  npm install --prefix projectManager && npm install --prefix backend && npm run build --prefix projectManager"
   },
   "keywords": [],
   "author": "",
