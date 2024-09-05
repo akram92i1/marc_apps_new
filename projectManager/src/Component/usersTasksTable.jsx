@@ -4,7 +4,7 @@ import {
     createTheme,
     StyledEngineProvider,
     ThemeProvider
-  } from "@mui/material/styles";
+  } from "@mui/styles";
 
   const columns = [
     {

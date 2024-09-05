@@ -1,9 +1,9 @@
 
 
 import React from "react";
-import { Grid, List, ListItem, ListItemText, Divider, TextField, Fab } from "@material-ui/core";
-import SendIcon from "@material-ui/icons/Send";
-import { makeStyles } from "@material-ui/core/styles";
+import { Grid, List, ListItem, ListItemText, Divider, TextField, Fab } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
     table: {

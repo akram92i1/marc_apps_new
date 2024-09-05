@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Card, CardContent, Typography, Box, Divider } from '@mui/material';
+import { Grid, Card, Typography, Box, Divider } from '@mui/material';
 import MyCalendar from './MyCalendar';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode'; 
@@ -7,8 +7,6 @@ import MyCardtaskComponent  from './Component/taskComponent' ;
 import  MyFinishedTaskComponent from "./Component/dataInfo" ; 
 import Navbar from './Navbar';
 import BarsDataset from './Component/stats';
-import { MessageLeft, MessageRight } from "./Component/ChatBox";
-import { yellow } from '@mui/material/colors';
 import ChatComponent from './Component/Messaging/usersChatComponent' ; 
 import UsersTasksTable from './Component/usersTasksTable';
 export default function Home() {
