@@ -20,7 +20,7 @@ const LoginPage = ({handleClickOpenSignup}) => {
     setLoading(true);
     setError('')
     try{
-    const response  = await axios.post('https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/auth/login', {email, password});
+    const response  = await axios.post('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/auth/login', {email, password});
     const {token} = response.data;
     localStorage.setItem('token', token);
 

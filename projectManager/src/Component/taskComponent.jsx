@@ -24,7 +24,7 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
   useEffect(() => {
     const fetchNewFinishedEvents = async () => {
       try {
-        const response = await axios.get('https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/finishedEvents', {
+        const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -62,7 +62,7 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
       const userId = decoded.user.id;
       console.log("User ID:", userId);
       try {
-        await axios.post(`https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/${userId}/finishedEvents`, {
+        await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
           taskId: selectedEvent,
           month: selectedEventMonth
         }, {

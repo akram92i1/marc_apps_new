@@ -16,7 +16,7 @@ export default function SignupDialog({openSignup, handleCloseSignup}){
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/auth/signup', { username, email, password });
+      const response = await axios.post('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/auth/signup', { username, email, password });
       console.log(response.data);
       setUserValidation('User registred Sucessfully');
       handleCloseSignup();

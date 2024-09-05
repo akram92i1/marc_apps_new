@@ -51,7 +51,7 @@ const MyFinishedTaskComponent = ({allFinishedEvents , setFinishedEvents}) => {
         const userId = decoded.user.id; 
         console.log("User id:",userId);
         try {
-            const response = axios.post(`https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/${userId}/finishedEvents`,  { taskId: selectedEvent } , {
+            const response = axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`,  { taskId: selectedEvent } , {
               headers: {
                 'Authorization': `Bearer ${token}`
               }

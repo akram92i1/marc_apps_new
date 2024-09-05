@@ -11,7 +11,7 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const corsOptions = {
-  origin: ['https://localhost:3000', 'https://semerlepresent2-c1afa04ef3e6.herokuapp.com' , 'https://www.semerlepresent.net'],
+  origin: ['https://localhost:5000', 'https://semer-le-present-f32d8fb5ce8e.herokuapp.com/' , 'https://www.semerlepresent.net'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   optionsSuccessStatus: 204

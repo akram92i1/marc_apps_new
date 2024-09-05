@@ -27,7 +27,7 @@ export default function Home() {
                 const decoded = jwtDecode(token);
                 const userId = decoded.user.id;
                 try {
-                    const response = await axios.get(`https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/${userId}/events`, {
+                    const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/events`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -44,7 +44,7 @@ export default function Home() {
                 const decoded = jwtDecode(token);
                 const userId = decoded.user.id;
                 try {
-                    const response = await axios.get(`https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/${userId}/userInformations`, {
+                    const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/userInformations`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -63,7 +63,7 @@ export default function Home() {
                 const userId = decoded.user.id;
 
                 try {
-                    const response = await axios.get(`https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/${userId}/finishedEvents`, {
+                    const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -80,7 +80,7 @@ export default function Home() {
               const decoded = jwtDecode(token);
               const userId = decoded.user.id;
               try {
-                const response = await axios.get(`https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/${userId}/allUsersEvents`, {
+                const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/allUsersEvents`, {
                   headers: {
                     'Authorization': `Bearer ${token}`
                   }
@@ -129,7 +129,7 @@ export default function Home() {
             const userId = decoded.user.id;
             console.log(userId);
             try {
-                const response = await axios.post(`https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/${userId}/events`, newEvent, {
+                const response = await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/events`, newEvent, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -166,7 +166,7 @@ export default function Home() {
                     const decoded = jwtDecode(token);
                     const userId = decoded.user.id;
                 try { 
-                const response = await axios.get(`https://semerlepresent2-c1afa04ef3e6.herokuapp.com/api/users/${userId}/events` , {
+                const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/events` , {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
