@@ -14,6 +14,8 @@ router.post('/login', async (req, res) => {
         console.log("--> no user was found");
         return res.status(400).json({ msg: 'Invalid credentials' });
       }
+      console.log("--> user was found");
+      console.log("--> user.password" , user.password);
       const validPassword = await bcrypt.compare(password, user.password);
       if (!validPassword) {
         console.log("--> Invalid credentials");
