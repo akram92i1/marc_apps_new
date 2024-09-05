@@ -3,12 +3,11 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
-
-     
+const User = require('../models/User');
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    console.log("email" , email);
-    console.log("password" , password); 
+    console.log("--> email" , email);
+    console.log("--> password" , password); 
     try {
       let user = await User.findOne({ email });
       if (!user) {
