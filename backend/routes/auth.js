@@ -8,15 +8,17 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     console.log("--> email" , email);
     console.log("--> password" , password); 
-    try {
+  try {
       let user = await User.findOne({ email });
       if (!user) {
         console.log("--> no user was found");
         return res.status(400).json({ msg: 'Invalid credentials' });
       }
       console.log("--> user was found");
+      console.log("")
       console.log("--> user.password" , user.password);
       const validPassword = await bcrypt.compare(password, user.password);
+      console.log("The valid password value" , validPassword);
       if (!validPassword) {
         console.log("--> Invalid credentials");
         return res.status(400).json({ msg: 'Invalid credentials' });
