@@ -17,14 +17,15 @@ router.post('/login', async (req, res) => {
       console.log("--> user was found");
       console.log("")
       console.log("--> user.password" , user.password);
-      const validPassword = await bcrypt.compare(password, user.password);
-      console.log("The valid password value" , validPassword);
-      if (!validPassword) {
-        console.log("--> Invalid credentials");
-        return res.status(400).json({ msg: 'Invalid credentials' });
+      bcrypt.compare(password, user.password).then((validPassword) => {
+      if (validPassword) {
+        console.log('Passwords match!');
+        } else {
+        console.log('Passwords do not match!');
+           console.log("--> Invalid credentials");                                                                                                                                                        
+           return res.status(400).json({ msg: 'Invalid credentials' }); 
       }
-    
-  
+      });
       const payload = {
         user: {
           id: user.id,
