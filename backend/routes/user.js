@@ -16,7 +16,7 @@ const auth = (req, res, next) => {
     return res.status(401).json({ msg: 'No token, authorization denied' });
   }
   console.log("verifiedToken" , tokenVer)
-    req.user = tokenVer.user;s
+    req.user = tokenVer.user;
     next();
   };
 
