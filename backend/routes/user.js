@@ -11,12 +11,12 @@ const JWT_SECRET = process.env.JWT_SECRET;
 //middleware to verify token    
 const auth = (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
-  const verifiedToken = verifiedToken(token , {returnPayload:true})
-  if (!verifiedToken) {
+  const tokenVer = verifiedToken(token , {returnPayload:true})
+  if (!tokenVer) {
     return res.status(401).json({ msg: 'No token, authorization denied' });
   }
-  console.log("verifiedToken" , verifiedToken)
-    req.user = verifiedToken.user;s
+  console.log("verifiedToken" , tokenVer)
+    req.user = tokenVer.user;s
     next();
   };
 
@@ -187,8 +187,7 @@ router.get('/:userId/userInformations' , auth , async (req , res)=>{
     res.json({username:userInformation_name , imageUrl: userInformation_urlpicture })
   }
   catch(err){
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error--->'+err });
   }
 })
 
