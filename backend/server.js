@@ -41,7 +41,17 @@ mongoose.connect(`mongodb+srv://admin:Tbm930antonov2@marcdatabase.rcgfo.mongodb.
 const reactApp = path.join(__dirname, '../projectManager/build'); 
 app.use(express.static(reactApp));
 app.get('*', (req, res) => {  
-  res.sendFile(path.join(reactApp));
+  const token = req.cookies.token || req.headers['authorization'];
+  if (!token) {
+    return res.redirect('/login'); // Redirect to login page
+  }
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded.user;
+    res.sendFile(path.join(reactApp)); // Serve the React app
+  } catch (err) {
+    return res.redirect('/login'); // Redirect to login page
+  }
 });
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
