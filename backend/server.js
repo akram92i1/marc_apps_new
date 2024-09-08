@@ -36,6 +36,7 @@ mongoose.connect(`mongodb+srv://admin:Tbm930antonov2@marcdatabase.rcgfo.mongodb.
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log('MongoDB connection error:', err));
 
+
 // Wildcard route to serve the React app for any unmatched routes
 const reactApp = path.join(__dirname, '../projectManager/build'); 
 app.use(express.static(reactApp));

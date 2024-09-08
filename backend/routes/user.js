@@ -203,7 +203,7 @@ router.get('/:userId/finishedEvents' , auth , async (req , res)=> {
     res.json(finishedEvents);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'No finished events yet !' });
   } 
 })
 

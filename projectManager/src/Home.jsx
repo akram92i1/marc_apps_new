@@ -23,6 +23,7 @@ export default function Home() {
     useEffect(() => {
         const fetchEvents = async () => {
             const token = localStorage.getItem('token');
+            console.log("fetching events ...");
             if (token) {
                 const decoded = jwtDecode(token);
                 const userId = decoded.user.id;
