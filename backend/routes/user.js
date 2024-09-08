@@ -43,7 +43,7 @@ router.get('/:userId/allUsersEvents', auth, async (req, res) => {
   } catch (err) {
     
     console.error(err.message);
-    return res.status(500).send('Serverrr error');
+    return res.status(500).send('servers error');
   }
 });
 
@@ -145,10 +145,10 @@ router.post('/:userId/finishedEvents', auth, async (req, res) => {
     const newFinishedEvent = { taskId ,  month};
     user.finishedEvents.push(newFinishedEvent);
     await user.save();
-    res.status(201).json(user.finishedEvents);
+    return res.status(201).json(user.finishedEvents);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send('Error adding finished event');
+    return res.status(500).send('Error adding finished event');
   }
 });
 
@@ -164,10 +164,10 @@ router.get('/:userId/events', auth, async (req, res) => {
     const events_filtered = user.events.filter(event => {
       return !user.finishedEvents.some(finishedEvent => finishedEvent.taskId === event._id.toString());
       });
-    res.status(200).json(events_filtered);
+    return res.status(200).json(events_filtered);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    return res.status(500).send('Server error');
   }
 });
 
@@ -184,10 +184,10 @@ router.get('/:userId/userInformations' , auth , async (req , res)=>{
     const userInformation_name = user.username
     const userInformation_urlpicture = user.profilePic
     console.log("here is some data about your   ")
-    res.json({username:userInformation_name , imageUrl: userInformation_urlpicture })
+    return res.json({username:userInformation_name , imageUrl: userInformation_urlpicture })
   }
   catch(err){
-    res.status(500).json({ message: 'Server error--->'+err });
+    return res.status(500).json({ message: 'Server error--->'+err });
   }
 })
 
@@ -200,10 +200,10 @@ router.get('/:userId/finishedEvents' , auth , async (req , res)=> {
     }
     const finishedEventIds = user.finishedEvents.map(finishedEvent => finishedEvent.taskId);
     const finishedEvents = user.events.filter(event => finishedEventIds.includes(event._id.toString()));
-    res.json(finishedEvents);
+    return res.json(finishedEvents);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'No finished events yet !' });
+    return res.status(500).json({ message: 'No finished events yet !' });
   } 
 })
 
@@ -219,9 +219,9 @@ router.post('/:userId/delete-event', (req, res) => {
     (err, user) => {
       if (err) {
         console.error(err);
-        res.status(500).send('Error deleting event');
+        return res.status(500).send('Error deleting event');
       } else {
-        res.send(`Event deleted successfully`);
+        return res.send(`Event deleted successfully`);
       }
     } 
   );

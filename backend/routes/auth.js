@@ -14,14 +14,10 @@ router.post('/login', async (req, res) => {
         console.log("--> no user was found");
         return res.status(400).json({ msg: 'Invalid credentials' });
       }
-      console.log("--> user was found");
-      console.log("")
-      console.log("--> user.password" , user.password);
       bcrypt.compare(password, user.password).then((validPassword) => {
       if (validPassword) {
         console.log('Passwords match!');
         } else {
-        console.log('Passwords do not match!');
            console.log("--> Invalid credentials");                                                                                                                                                        
            return res.status(400).json({ msg: 'Invalid credentials' }); 
       }
@@ -34,12 +30,12 @@ router.post('/login', async (req, res) => {
   
       const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        return res.json({ token });
       });
   
     } catch (err) {
       console.error(err.message);
-      res.status(500).send( {message:'Server error'});
+      return res.status(500).send( {message:'Server error'});
     }
   });
 
@@ -73,12 +69,12 @@ router.post('/signup', async (req, res) => {
   
       jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
         if (err) throw err;
-        res.status(201).json({ token }); 
+        return res.status(201).json({ token }); 
       });
   
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server error');
+      return res.status(500).send('Server error');
     }
   });
 
