@@ -173,6 +173,7 @@ router.get('/:userId/events', auth, async (req, res) => {
 
 
 router.get('/:userId/userInformations' , auth , async (req , res)=>{
+  console.log("try to get some user informations !") ; 
   const {userId}= req.params ; 
   try{
     const user = await User.findById(userId); 
