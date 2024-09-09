@@ -11,12 +11,23 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const corsOptions = {
-  origin: ['https://localhost:5000', 'https://semer-le-present-f32d8fb5ce8e.herokuapp.com/' , 'https://www.semerlepresent.net'],
+  origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   optionsSuccessStatus: 204
 };
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || corsOptions.origin.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 204
+}));
 // Middleware
 app.use(express.json());
 

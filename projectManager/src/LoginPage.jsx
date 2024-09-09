@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const theme = createTheme();
 
 const LoginPage = ({handleClickOpenSignup}) => {
+  axios.default.withCredentials = true ; 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

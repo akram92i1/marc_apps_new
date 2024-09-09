@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { Icon } from '@mui/material';
 const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinishedEvents }) => {
+  axios.default.withCredentials = true ; 
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedEventMonth, setSelectedEventMonth] = useState(null);

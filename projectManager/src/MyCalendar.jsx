@@ -4,8 +4,9 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './myCalendar.css';
 import { Button , Box , TextField } from '@mui/material';
-
+import axios from 'axios';
 const MyCalendar = ({ events, onAddEvent }) => {
+  axios.default.withCredentials = true ; 
   const [title, setTitle] = useState('');
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
