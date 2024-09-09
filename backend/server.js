@@ -29,6 +29,7 @@ const corsOptions = {
 //   optionsSuccessStatus: 204
 // }));
 
+app.use(cookieParser());
 app.use(cors({
   origin: (origin, callback) => {
     callback(null, true); // Allow all origins
@@ -69,7 +70,7 @@ app.get('*', (req, res) => {
     req.user = decoded.user;
     res.sendFile(path.join(reactApp)); // Serve the React app
   } catch (err) {
-    return res.redirect('/login'); // Redirect to login page
+    return res.redirect('/'); // Redirect to login page
   }
 });
 const PORT = process.env.PORT || 5000;
