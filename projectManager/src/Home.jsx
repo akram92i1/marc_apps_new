@@ -8,8 +8,10 @@ import  MyFinishedTaskComponent from "./Component/dataInfo" ;
 import Navbar from './Navbar';
 import BarsDataset from './Component/stats';
 import ChatComponent from './Component/Messaging/usersChatComponent' ; 
+import Cookies from 'js-cookie' ; 
 import UsersTasksTable from './Component/usersTasksTable';
 export default function Home() {
+    axios.default.withCredentials = true ; 
     const [completedTasks, setCompletedTasks] = useState([]); // Example value
     const [totalTasks, setTotalTasks] = useState(10); // Example value
     const [events, setEvents] = useState([]);
@@ -21,6 +23,15 @@ export default function Home() {
     const [allUsersEvents , setAllUsersEvents] =   useState([]);
     const [userInformations , setUserInformation] = useState([]) ; 
     useEffect(() => {
+
+        const setheCookies = () => {
+            const token = localStorage.getItem('token');
+            if (token){
+                Cookies.set('token' , token , {expires:1}) ; // expires in 1 day
+                localStorage.removeItem('token');
+            }
+        }
+
         const fetchEvents = async () => {
             const token = localStorage.getItem('token');
             console.log("fetching events ...");
@@ -118,6 +129,7 @@ export default function Home() {
         fecthAllUsersData();
         fecthFinishedEvents();
         fetchUserInformation();
+        setheCookies();
     }, []);
     const handleClickOpen = () => {
         setOpen(true);

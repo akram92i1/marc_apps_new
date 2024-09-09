@@ -61,8 +61,8 @@ mongoose.connect(`mongodb+srv://admin:Tbm930antonov2@marcdatabase.rcgfo.mongodb.
 const reactApp = path.join(__dirname, '../projectManager/build'); 
 app.use(express.static(reactApp));
 app.get('*', (req, res) => { 
-  const token = req.cookies.token || req.headers['authorization'];
-  console.log("here is done information about token" ,req.headers['authorization']);
+  const token = req.cookies.token ;
+  console.log("here is done information about token --->" ,token);
   if (!token) {
     return res.redirect('/'); // Redirect to login page
   }
