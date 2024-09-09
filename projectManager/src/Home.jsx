@@ -29,6 +29,11 @@ export default function Home() {
             if (token){
                 Cookies.set('token' , token , {expires:1}) ; // expires in 1 day
                 localStorage.removeItem('token');
+                // Make a request to the server-side to send the cookie
+                fetch('/verify-token', {
+                    method: 'GET',
+                    credentials: 'include', // Include cookies in the request
+                });
             }
         }
 
