@@ -17,13 +17,21 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 // app.use(cors(corsOptions));
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     if (!origin || corsOptions.origin.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   credentials: true,
+//   optionsSuccessStatus: 204
+// }));
+
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || corsOptions.origin.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+    callback(null, true); // Allow all origins
   },
   credentials: true,
   optionsSuccessStatus: 204
