@@ -78,7 +78,7 @@ app.use(express.static(reactApp));
 // app.listen(PORT, () => {
 //   console.log(`Server is running on port ${PORT}`);
 // });
-app.get('/verify-token', (req, res) => {
+app.get('/verify-token', (req, res , next) => {
   const token = req.cookies.token;
   console.log("here is done information about token --->", token);
   if (!token) {
@@ -87,7 +87,7 @@ app.get('/verify-token', (req, res) => {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     req.user = decoded.user;
-    res.sendFile(path.join(reactApp)); // Serve the React app
+    next();
   } catch (err) {
     return res.redirect('/'); // Redirect to login page
   }
