@@ -60,10 +60,11 @@ mongoose.connect(`mongodb+srv://admin:Tbm930antonov2@marcdatabase.rcgfo.mongodb.
 // Wildcard route to serve the React app for any unmatched routes
 const reactApp = path.join(__dirname, '../projectManager/build'); 
 app.use(express.static(reactApp));
-app.get('*', (req, res) => {  
+app.get('*', (req, res) => { 
   const token = req.cookies.token || req.headers['authorization'];
+  console.log("here is done information about token" ,req.headers['authorization']);
   if (!token) {
-    return res.redirect('/login'); // Redirect to login page
+    return res.redirect('/'); // Redirect to login page
   }
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
