@@ -7,7 +7,6 @@ import {Alert} from '@mui/material';
 const theme = createTheme();
 
 export default function SignupDialog({openSignup, handleCloseSignup}){
-  axios.default.withCredentials = true ; 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

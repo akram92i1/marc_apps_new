@@ -8,7 +8,6 @@ import { jwtDecode } from 'jwt-decode';
 import IconButton from '@mui/material/IconButton';
 import axios from 'axios';
 const MyFinishedTaskComponent = ({allFinishedEvents , setFinishedEvents}) => {
-    axios.default.withCredentials = true ; 
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);

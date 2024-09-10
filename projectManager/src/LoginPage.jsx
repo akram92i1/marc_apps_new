@@ -4,18 +4,32 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-
+import { useEffect } from 'react';
+import Cookies from 'js-cookie' ; 
 const theme = createTheme();
 
 const LoginPage = ({handleClickOpenSignup}) => {
-  axios.default.withCredentials = true ; 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate hook
+  useEffect(() => {
   
+    const checkLogedInUser =  async () => {
+      const token = localStorage.getItem('token');
+      if (token){
+          console.log("User already loggedIn the token in the token..." , token) ; 
+          // Make a request to the server-side to send the cookie
+          navigate('/dashboard');
+        }
+        else{
+          navigate('/');
+        }
+      }
+      checkLogedInUser();
+  });
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);

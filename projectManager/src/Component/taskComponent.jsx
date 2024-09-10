@@ -6,7 +6,6 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { Icon } from '@mui/material';
 const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinishedEvents }) => {
-  axios.default.withCredentials = true ; 
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedEventMonth, setSelectedEventMonth] = useState(null);
@@ -24,8 +23,13 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
 
   useEffect(() => {
     const fetchNewFinishedEvents = async () => {
-      try {
-        const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents', {
+      const token = localStorage.getItem('token');
+      if(token)
+      {
+        const decoded = jwtDecode(token);
+        const userId = decoded.user.id;
+              try {
+        const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -36,6 +40,11 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
       } catch (error) {
         console.error("Error fetching finished events:", error);
       }
+      }
+      else{
+        console.log("notoken is availible...");
+      }
+
     };
   
     fetchNewFinishedEvents();

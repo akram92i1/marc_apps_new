@@ -15,7 +15,6 @@ import dayjs from "dayjs";
 
 
 export default function FormDialog({open, handleClose}) {
-    axios.default.withCredentials = true ; 
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const [activity, setActivity] = useState('');
     const handleSubmit = () => {

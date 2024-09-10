@@ -62,49 +62,6 @@ router.post("/:userId/AllUserInformation" , auth , async (req , res)=>{
     console.error("there is an error with users.. ")
   }
 })
-// Login route
-// Login route
-// router.post('/login', async (req, res) => {
-//   // Extract email and password from request body
-//   const { email, password } = req.body;
-//   console.log("email" , email);
-//   console.log("password" , password); 
-//   try {
-//     // Find user by email
-//     let user = await User.findOne({ email });
-//     if (!user) {
-//       // If user not found, return invalid credentials message
-//       return res.status(400).json({ msg: 'Invalid credentials' });
-//     }
-
-//     // Check if password matches (Note: This is not secure, should use bcrypt)
-//     const isMatch = password == user.password;
-//     if (!isMatch) {
-//       // If password doesn't match, return invalid credentials message
-//       return res.status(400).json({ msg: 'Invalid credentials' });
-//     }
-
-//     // Create payload for JWT
-//     const payload = {
-//       user: {
-//         id: user.id,
-//       },
-//     };
-
-//     // Sign JWT
-//     jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-//       if (err) throw err;
-//       // Send token in response
-//       res.json({ token });
-//     });
-
-//   } catch (err) {
-//     // Log error and send server error message
-//     console.error(err.message);
-//     res.status(500).send( {message:'Server error'});
-//   }
-// });
-
 // Add an event
 router.post('/:userId/events', auth, async (req, res) => {
   const { userId } = req.params;
@@ -226,6 +183,4 @@ router.post('/:userId/delete-event', (req, res) => {
     } 
   );
 });
-
-
 module.exports = router;
