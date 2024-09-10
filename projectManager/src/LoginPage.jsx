@@ -4,7 +4,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import Cookies from 'js-cookie' ; 
 const theme = createTheme();
 
@@ -14,7 +14,7 @@ const LoginPage = ({handleClickOpenSignup}) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate hook
-  useEffect(() => {
+  useLayoutEffect(() => {
   
     const checkLogedInUser =  async () => {
       const token = localStorage.getItem('token');

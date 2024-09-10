@@ -57,7 +57,7 @@ router.post('/login', async (req, res) => {
           id: user.id,
         },
       };
-      jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+      jwt.sign(payload, JWT_SECRET, { expiresIn: '30s' }, (err, token) => {
         if (err) throw err;
         return res.json({ token });
       });
