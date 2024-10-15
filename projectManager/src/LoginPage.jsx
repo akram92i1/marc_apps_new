@@ -16,19 +16,27 @@ const LoginPage = ({handleClickOpenSignup}) => {
   const navigate = useNavigate(); // Initialize useNavigate hook
   useLayoutEffect(() => {
   
-    const checkLogedInUser =  async () => {
-      const token = localStorage.getItem('token');
-      if (token){
-          console.log("User already loggedIn the token in the token..." , token) ; 
-          // Make a request to the server-side to send the cookie
+    const checkLoggedInUser = async () => {
+      try {
+        // Make a request to the backend to check if the user is authenticated
+        const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/auth/auth-check', {
+          withCredentials: true, // Ensure cookies are sent with the request
+        });
+
+        if (response.status === 200) {
+          // User is authenticated, navigate to the dashboard
+          console.log("User is authenticated");
           navigate('/dashboard');
         }
-        else{
-          navigate('/');
-        }
+      } catch (error) {
+        // If token is expired or invalid, redirect to the login page
+        console.error("Authentication failed or token expired:", error);
+        navigate('/'); // Redirect to login page
       }
-      checkLogedInUser();
-  });
+    };
+
+    checkLoggedInUser();
+  },  [navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -63,8 +71,8 @@ const LoginPage = ({handleClickOpenSignup}) => {
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Login
+          <Typography component="h1" variant="h52">
+                  Forgot password?
           </Typography>
           {error && <Alert severity = "error">{error}</Alert>}
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>

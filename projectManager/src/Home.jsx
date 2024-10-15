@@ -29,9 +29,7 @@ export default function Home() {
                 const userId = decoded.user.id;
                 try {
                     const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/events`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
+                        withCredentials: true, // Ensure cookies are sent with the request
                     }); 
                    setEvents(response.data);
                 } catch (err) {
@@ -46,9 +44,7 @@ export default function Home() {
                 const userId = decoded.user.id;
                 try {
                     const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/userInformations`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
+                        withCredentials: true, // Ensure cookies are sent with the request
                     });
                     console.log("user information" , response.data )
                     setUserInformation([response.data.username , response.data.imageUrl ])
@@ -65,9 +61,7 @@ export default function Home() {
 
                 try {
                     const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
+                        withCredentials: true, // Ensure cookies are sent with the request
                     });
                     setCompletedTasks(response.data)
                 } catch (error) {
@@ -80,11 +74,10 @@ export default function Home() {
             if (token) {
               const decoded = jwtDecode(token);
               const userId = decoded.user.id;
+              console.log("The new userId with the cookies is working fine ",userId)
               try {
                 const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/allUsersEvents`, {
-                  headers: {
-                    'Authorization': `Bearer ${token}`
-                  }
+                    withCredentials: true, // Ensure cookies are sent with the request
                 });
                 console.log('Response Status:', response.status); // Check the response status
                 console.log('Response Data:', response.data); // Log the response data
@@ -123,21 +116,28 @@ export default function Home() {
         setOpen(true);
       };
 
-    const handleAddEvent = async (newEvent) => {
+      const handleAddEvent = async (newEvent) => {
         const token = localStorage.getItem('token');
         if (token) {
             const decoded = jwtDecode(token);
             const userId = decoded.user.id;
             console.log(userId);
             try {
+                // Make a request to the server to save the event
                 const response = await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/events`, newEvent, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                setEvents(response.data);
+                
+                // Check if the request is successful
+                if (response.status === 201 || response.status === 200) {
+                    // After successful save, update the local events list
+                    const savedEvent = newEvent;  // The new event returned by the server (you can modify this based on the API response)
+                    setEvents((prevEvents) => [...prevEvents, savedEvent]);  // Update local state
+                }
             } catch (err) {
-                console.error(err);
+                console.error("Error adding event:", err);
             }
         }
     };
@@ -229,7 +229,7 @@ export default function Home() {
                                     </Typography>
                                 </Box>
                                 <Box sx={{ width: '100%', height: '100%' }}>
-                                    <MyCalendar events={allUsersTask} onAddEvent={handleAddEvent} />
+                                    <MyCalendar events={events} onAddEvent={handleAddEvent} />
                                 </Box>
                             </Box>
                         </Card>

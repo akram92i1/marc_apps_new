@@ -16,18 +16,6 @@ const corsOptions = {
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   optionsSuccessStatus: 204
 };
-// app.use(cors(corsOptions));
-// app.use(cors({
-//   origin: (origin, callback) => {
-//     if (!origin || corsOptions.origin.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-//   credentials: true,
-//   optionsSuccessStatus: 204
-// }));
 
 app.use(cookieParser());
 app.use(cors({
@@ -66,13 +54,15 @@ app.get('*', (req, res , next) => {
   const token = req.cookies.token;
   console.log("here is done information about token --->", token);
   if (!token) {
+    console.log("No token was found redirect to login page ")
     return res.redirect('/'); // Redirect to login page
   }
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded.user;
     next();
   } catch (err) {
+    console.log("Error verifying token:",err)
     return res.redirect('/'); // Redirect to login page
   }
 });
