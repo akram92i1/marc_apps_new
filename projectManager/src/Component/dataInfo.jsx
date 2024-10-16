@@ -20,41 +20,25 @@ const MyFinishedTaskComponent = ({allFinishedEvents , setFinishedEvents}) => {
       console.log(eventId);
     };
 
-    // useEffect(()=> {
-    //     const fechtchNewFinishedEvents = async () => {
-    //         const token = localStorage.getItem('token');
-    //         if(token){
-    //             const decoded = jwtDecode(token);
-    //             const userId = decoded.user.id;
-    //             try {
-    //                const response = await axios.get(`http://127.0.0.1:5000/api/users/${userId}/finishedEvents` ,{
-    //                 headers: {
-    //                     'Authorization': `Bearer ${token}`
-    //                 }
-    //                }); 
-    //                setFinishedEvents(response.data)
-    //             }
-    //              catch (error) {
-    //                 console.log("Erroro",error)
-    //             }
-    //         }
-    //     }
-    //     fechtchNewFinishedEvents();
-    // } , []);
+    const fetchUserId = async () => {
+      try {
+          const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/me', {
+              withCredentials: true, // Ensure cookies are sent with the request
+          });
+          return response.data.user; // Return the user ID from the response
+      } catch (err) {
+          console.error("Error fetching user info:", err);
+      }
+  };
   
     const handleTasktClick =  async() => {
       console.log("----- change the state of an event ------");
       const eventTaskId = selectedEvent;
-      const token = localStorage.getItem('token') ; 
-      if(token){
-        const decoded = jwtDecode(token);
-        const userId = decoded.user.id; 
+        const userId = await fetchUserId(); 
         console.log("User id:",userId);
         try {
             const response = axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`,  { taskId: selectedEvent } , {
-              headers: {
-                'Authorization': `Bearer ${token}`
-              }
+              withCredentials: true, // Ensure cookies are sent with the request
             });
             
           // Filter out the finished event from the current events
@@ -62,7 +46,7 @@ const MyFinishedTaskComponent = ({allFinishedEvents , setFinishedEvents}) => {
         } catch (error) {
           console.log("Erroro",error)
         }
-      }
+      
   
     }
   

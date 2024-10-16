@@ -23,16 +23,10 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
 
   useEffect(() => {
     const fetchNewFinishedEvents = async () => {
-      const token = localStorage.getItem('token');
-      if(token)
-      {
-        const decoded = jwtDecode(token);
-        const userId = decoded.user.id;
+        const userId = await fetchUserId();
               try {
         const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          withCredentials: true, // Ensure cookies are sent with the request
         });
   
         setToken(response.data.token);
@@ -40,10 +34,8 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
       } catch (error) {
         console.error("Error fetching finished events:", error);
       }
-      }
-      else{
-        console.log("notoken is availible...");
-      }
+      
+   
 
     };
   
@@ -62,30 +54,35 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
         axios.interceptors.request.eject(authInterceptor);
       };
   }, [token]);
-
+  const fetchUserId = async () => {
+    try {
+        const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/me', {
+            withCredentials: true, // Ensure cookies are sent with the request
+        });
+        return response.data.user; // Return the user ID from the response
+    } catch (err) {
+        console.error("Error fetching user info:", err);
+    }
+};
   const handleTasktClick = async () => {
     console.log("----- Change the state of an event ------");
     const eventTaskId = selectedEvent;
     const token = localStorage.getItem('token');
-    if (token) {
-      const decoded = jwtDecode(token);
-      const userId = decoded.user.id;
-      console.log("User ID:", userId);
+    const userId = await fetchUserId(); 
+    console.log("User ID:", userId);
       try {
         await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
           taskId: selectedEvent,
           month: selectedEventMonth
         }, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          withCredentials: true, // Ensure cookies are sent with the request
         });
         // Filter out the finished event from the current events
         setEvents(allEvents.filter(event => event._id !== eventTaskId));
       } catch (error) {
         console.log("Error:", error);
       }
-    }
+ 
   };
 
   const handleClose = () => {

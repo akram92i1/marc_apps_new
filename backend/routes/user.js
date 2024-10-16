@@ -9,31 +9,40 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 
 //middleware to verify token    
+
 const auth = (req, res, next) => {
-  const token = req.cookies.token;
-  const tokenVer = verifiedToken(token , {returnPayload:true})
-  if (!tokenVer) {
+  const token = req.cookies.token; // Access the token from the HTTP-only cookie
+  console.log("token",token)
+  if (!token) {
     return res.status(401).json({ msg: 'No token, authorization denied' });
   }
-  console.log("verifiedToken" , tokenVer)
-    req.user = tokenVer.user;
-    next();
-  };
 
-// Function to verify the token
-const verifiedToken = (token, options = {}) => {
   try {
+    // Verify and decode the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    return options.returnPayload ? decoded : true;
+    req.user = decoded.user; // Attach the decoded user info to req.user
+    console.log("req user " , req.user.id);
+    next();
   } catch (err) {
-    return false; // Return false if the token is invalid or expired
+    console.error("Error verifying token:", err);
+    return res.status(401).json({ msg: 'Token is not valid' });
   }
 };
 
+// Assuming you have an auth middleware to verify the token
+router.get('/me', auth, async (req, res) => {
+  try {
+    // The auth middleware attaches the decoded token to req.user
+    res.json({ user: req.user.id });
+  } catch (err) {
+    console.error("Error fetching user info:", err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
 
 //get all events for each user 
 router.get('/:userId/allUsersEvents', auth, async (req, res) => {
-  const {userId} = req.user.id;
+  const userId = req.user.id;
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -51,7 +60,7 @@ router.get('/:userId/allUsersEvents', auth, async (req, res) => {
 
 // get all user information
 router.post("/:userId/AllUserInformation" , auth , async (req , res)=>{
-  const {userId} = req.user.id;
+  const userId = req.user.id;
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -65,13 +74,13 @@ router.post("/:userId/AllUserInformation" , auth , async (req , res)=>{
 })
 // Add an event
 router.post('/:userId/events', auth, async (req, res) => {
-  const {userId} = req.user.id;
-  console.log("Before fetching user events ")
+  const userId = req.user.id;
+  console.log("===> Before fetching user events ",userId)
   const { title, start, end } = req.body;
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ msg: 'User not found' });
+      return res.status(404).json({ msg: 'User not found haha' });
     }
     const newEvent = { title, start, end };
     user.events.push(newEvent);
@@ -90,7 +99,7 @@ router.post('/:userId/events', auth, async (req, res) => {
 
 // Add a finishedEvent 
 router.post('/:userId/finishedEvents', auth, async (req, res) => {
-  const {userId} = req.user.id;
+  const userId = req.user.id;
   const { taskId, month } = req.body
   try {
     const user = await User.findById(userId);
@@ -113,11 +122,11 @@ router.post('/:userId/finishedEvents', auth, async (req, res) => {
 
 // Get events
 router.get('/:userId/events', auth, async (req, res) => {
-  const {userId} = req.user.id;
+  const userId = req.user.id;
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ msg: 'User not found' });
+      return res.status(404).json({ msg: 'User not found HAHA ' });
     }
     // Filter out events that are already in finishedEvents
     const events_filtered = user.events.filter(event => {
@@ -133,7 +142,7 @@ router.get('/:userId/events', auth, async (req, res) => {
 
 router.get('/:userId/userInformations' , auth , async (req , res)=>{
   console.log("try to get some user informations !") ; 
-  const {userId} = req.user.id; 
+  const userId = req.user.id; 
   try{
     const user = await User.findById(userId); 
     if(!user){
@@ -151,7 +160,7 @@ router.get('/:userId/userInformations' , auth , async (req , res)=>{
 })
 
 router.get('/:userId/finishedEvents' , auth , async (req , res)=> {
-  const {userId} = req.user.id;
+  const userId = req.user.id;
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -168,7 +177,7 @@ router.get('/:userId/finishedEvents' , auth , async (req , res)=> {
 
 router.post('/:userId/delete-event', (req, res) => {
   const eventId = req.body.eventId; // Get the event ID from the request body
-  const {userId} = req.user.id;
+  const userId = req.user.id;
 
   // Find the user document and pull the event from the events array
   User.findOneAndUpdate(

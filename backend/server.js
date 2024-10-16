@@ -52,7 +52,7 @@ app.listen(PORT, () => {
 });
 app.get('*', (req, res , next) => {
   const token = req.cookies.token;
-  console.log("here is done information about token --->", token);
+  // console.log("here is done information about token --->", token);
   if (!token) {
     console.log("No token was found redirect to login page ")
     return res.redirect('/'); // Redirect to login page

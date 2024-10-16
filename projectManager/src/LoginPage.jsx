@@ -19,7 +19,7 @@ const LoginPage = ({handleClickOpenSignup}) => {
     const checkLoggedInUser = async () => {
       try {
         // Make a request to the backend to check if the user is authenticated
-        const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/auth/auth-check', {
+        const response = await axios.get('http://localhost:5000/api/auth/auth-check', {
           withCredentials: true, // Ensure cookies are sent with the request
         });
 
@@ -43,7 +43,7 @@ const LoginPage = ({handleClickOpenSignup}) => {
     setLoading(true);
     setError('')
     try{
-    const response  = await axios.post('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/auth/login', {email, password});
+    const response  = await axios.post('http://localhost:5000/api/auth/login', {email, password});
     const {token} = response.data;
     localStorage.setItem('token', token);
 

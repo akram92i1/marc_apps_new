@@ -22,11 +22,9 @@ export default function Home() {
     const [userInformations , setUserInformation] = useState([]) ; 
     useEffect(() => {
         const fetchEvents = async () => {
-            const token = localStorage.getItem('token');
-            console.log("fetching events ...");
-            if (token) {
-                const decoded = jwtDecode(token);
-                const userId = decoded.user.id;
+            const userId = await fetchUserId(); // Fetch the userId first
+            console.log("userId in fecthEvents",userId)
+                console.log("userID",userId)
                 try {
                     const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/events`, {
                         withCredentials: true, // Ensure cookies are sent with the request
@@ -35,30 +33,23 @@ export default function Home() {
                 } catch (err) {
                     console.error(err);
                 }
-            }
+            
         };
         const fetchUserInformation = async () => {
-            const token = localStorage.getItem('token');
-            if (token){
-                const decoded = jwtDecode(token);
-                const userId = decoded.user.id;
-                try {
-                    const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/userInformations`, {
-                        withCredentials: true, // Ensure cookies are sent with the request
-                    });
-                    console.log("user information" , response.data )
-                    setUserInformation([response.data.username , response.data.imageUrl ])
-                } catch (error) {
-                    console.error(error);
-                }
+            const userId = await fetchUserId(); 
+            try {
+                const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/userInformations`, {
+                    withCredentials: true, // Ensure cookies are sent with the request
+                });
+                console.log("user information" , response.data )
+                setUserInformation([response.data.username , response.data.imageUrl ])
+            } catch (error) {
+                console.error(error);
             }
+            
         }
         const fecthFinishedEvents = async () => {
-            const token = localStorage.getItem('token');
-            if (token) {
-                const decoded = jwtDecode(token);
-                const userId = decoded.user.id;
-
+            const userId = await fetchUserId(); 
                 try {
                     const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
                         withCredentials: true, // Ensure cookies are sent with the request
@@ -67,13 +58,10 @@ export default function Home() {
                 } catch (error) {
                     console.error(error);
                 }
-            } 
+         
         }
         const fecthAllUsersData = async () => {
-            const token = localStorage.getItem('token');
-            if (token) {
-              const decoded = jwtDecode(token);
-              const userId = decoded.user.id;
+              const userId = await fetchUserId(); 
               console.log("The new userId with the cookies is working fine ",userId)
               try {
                 const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/allUsersEvents`, {
@@ -104,7 +92,6 @@ export default function Home() {
               } catch (error) {
                 console.error(error);
               }
-            }
           };
 
         fetchEvents();
@@ -112,24 +99,30 @@ export default function Home() {
         fecthFinishedEvents();
         fetchUserInformation();
     }, []);
+
+    const fetchUserId = async () => {
+        try {
+            const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/me', {
+                withCredentials: true, // Ensure cookies are sent with the request
+            });
+            console.log("RESPONSE : =====> ",response)
+            return response.data.user; // Return the user ID from the response
+        } catch (err) {
+            console.error("Error fetching user info:", err);
+        }
+    };
     const handleClickOpen = () => {
         setOpen(true);
       };
 
       const handleAddEvent = async (newEvent) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            const decoded = jwtDecode(token);
-            const userId = decoded.user.id;
+            const userId = await fetchUserId(); 
             console.log(userId);
             try {
                 // Make a request to the server to save the event
                 const response = await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/events`, newEvent, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                
+                     withCredentials: true, // Ensure cookies are sent with the request
+                });   
                 // Check if the request is successful
                 if (response.status === 201 || response.status === 200) {
                     // After successful save, update the local events list
@@ -138,8 +131,7 @@ export default function Home() {
                 }
             } catch (err) {
                 console.error("Error adding event:", err);
-            }
-        }
+            }       
     };
 
     const buildAllEventsdata = (data) => {
@@ -162,26 +154,18 @@ export default function Home() {
     }
 
     const fetchAllEvents = async () => {
-        const token = localStorage.getItem('token');
-        if (token) {
-                    const decoded = jwtDecode(token);
-                    const userId = decoded.user.id;
-                try { 
-                const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/events` , {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                console.log("here is data ",response.data) 
-                setAllEvents(response.data);
-                } catch (error) {
-                console.error("Erroro :",error);
+            const userId = await fetchUserId(); 
+            try { 
+            const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/events` , {
+                withCredentials: true, // Ensure cookies are sent with the request
+            });
+            console.log("here is data ",response.data) 
+            setAllEvents(response.data);
+            } catch (error) {
+            console.error("Erroro :",error);
         }
-            }
+          
       }; 
-
-
-
       console.log("Events",allUsersEvents)
       console.log("small events :",events)
     return (
