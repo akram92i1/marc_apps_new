@@ -9,11 +9,11 @@ router.post('/login', async (req, res) => {
   console.log("Trying to login...");
   const { email, password } = req.body;
   console.log("Email:", email, "Password:", password);
-  
+
   try {
     let user = await User.findOne({ email });
     console.log("Found user:", user);
-    
+
     if (!user) {
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
@@ -33,22 +33,11 @@ router.post('/login', async (req, res) => {
       },
     };
 
-    // Signing the JWT and sending it in an HTTP-only cookie
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-      if (err) throw err;
+    // Signing the JWT and sending it in the response body
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-      // Send the token in an HTTP-only cookie
-      res.cookie('token', token, {
-        httpOnly: true,                   // Cookie can't be accessed via JavaScript
-        secure: false , 
-        SameSite:'Lax',              // CSRF protection
-        path: '/',                         // Ensure the cookie is available for all routes
-        maxAge: 60 * 60 * 1000,           // Expires in 1 hour (matching the JWT expiration)
-      });
-
-      // Return a message confirming login success
-      return res.json({ message: 'Logged in successfully' });
-    });
+    // Return the token in the response
+    return res.json({ token });
 
   } catch (err) {
     console.error(err.message);
@@ -57,11 +46,18 @@ router.post('/login', async (req, res) => {
 });
 
 
-// check if the user still loged in with auth check 
+// check if the user is still logged in with auth check
 router.get('/auth-check', (req, res) => {
-  const token = req.cookies.token;  // Get token from the cookie
-  if (!token) {
+  // Get token from the Authorization header
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) {
     return res.status(401).json({ msg: 'No token, authorization denied' });
+  }
+
+  // Extract token from 'Bearer <token>'
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ msg: 'Token missing' });
   }
 
   try {
@@ -81,7 +77,7 @@ router.post('/signup', async (req, res) => {
         return res.status(400).json({ msg: 'User already exists' });
       }
   
-      const boyrofilePicture = `https://avatar.iran.liara.run/public/boy?username={username}`
+      const boyrofilePicture = `https://avatar.iran.liara.run/public/boy?username=${username}`
       user = new User({
         username,
         email,

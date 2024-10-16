@@ -1,16 +1,15 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Card, Avatar, Divider, Box, Typography, CardHeader, Popover, IconButton } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { Card, Typography, CardHeader, Popover, IconButton } from "@mui/material";
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
-import { Icon } from '@mui/material';
+
 const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinishedEvents }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedEventMonth, setSelectedEventMonth] = useState(null);
-  const TaskState = ["Tache effectue", "Tache supprime"];
-  const [token, setToken] = useState();
+  const TaskState = ["Tache effectuée", "Tache supprimée"];
+
   const handleSettingsClick = (event, eventId, eventEndDate) => {
     setAnchorEl(event.currentTarget);
     setSelectedEvent(eventId);
@@ -23,67 +22,58 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
 
   useEffect(() => {
     const fetchNewFinishedEvents = async () => {
-        const userId = await fetchUserId();
-        
+      const userId = await fetchUserId();
       try {
+        const token = localStorage.getItem('token');
         const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
-          withCredentials: true, // Ensure cookies are sent with the request
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
         });
-  
-        setToken(response.data.token);
         setFinishedEvents(response.data);
       } catch (error) {
         console.error("Error fetching finished events:", error);
       }
-      
-   
-
     };
-  
+
     fetchNewFinishedEvents();
     console.log("Component has changed");
-  }, [allEvents]);
-  
+  }, [allEvents, setFinishedEvents]);
 
-  useLayoutEffect(() => {
-    const authInterceptor = axios.interceptors.request.use(config => {  
-      config.headers.Authorization = 
-      !config._retry && token ? `Bearer ${token}`
-      : config.headers.Authorization;
-      return config;});
-      return () => { 
-        axios.interceptors.request.eject(authInterceptor);
-      };
-  }, [token]);
   const fetchUserId = async () => {
     try {
-        const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/me', {
-            withCredentials: true, // Ensure cookies are sent with the request
-        });
-        return response.data.user; // Return the user ID from the response
+      const token = localStorage.getItem('token');
+      const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response.data.user; // Return the user ID from the response
     } catch (err) {
-        console.error("Error fetching user info:", err);
+      console.error("Error fetching user info:", err);
     }
-};
+  };
+
   const handleTasktClick = async () => {
     console.log("----- Change the state of an event ------");
     const eventTaskId = selectedEvent;
     const token = localStorage.getItem('token');
-    const userId = await fetchUserId(); 
+    const userId = await fetchUserId();
     console.log("User ID:", userId);
-      try {
-        await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
-          taskId: selectedEvent,
-          month: selectedEventMonth
-        }, {
-          withCredentials: true, // Ensure cookies are sent with the request
-        });
-        // Filter out the finished event from the current events
-        setEvents(allEvents.filter(event => event._id !== eventTaskId));
-      } catch (error) {
-        console.log("Error:", error);
-      }
- 
+    try {
+      await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
+        taskId: selectedEvent,
+        month: selectedEventMonth,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      // Filter out the finished event from the current events
+      setEvents(allEvents.filter(event => event._id !== eventTaskId));
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
 
   const handleClose = () => {
@@ -96,7 +86,7 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
         const newEvent = { ...event };
         newEvent.start = formatDate(newEvent.start);
         newEvent.end = formatDate(newEvent.end);
-        
+
         const today = new Date();
         const startDate = new Date(event.start);
         const dateDiff = Math.abs(startDate - today);
@@ -105,18 +95,23 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
 
         return (
           <div key={event._id}>
-            <Card key={index} variant="outlined" sx={{
-              maxWidth: 500, 
-              bgcolor: color, 
-              color: componentTextColor, 
-              height: "100%",
-              marginBottom: 1,
-              boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Base shadow
-              '&:hover': {
-                boxShadow: '-5px -5px 5px rgba(0.5, 0.5, 0.5, 0.5)', // Hover shadow
-              }
-            }}>
-              <CardHeader sx={{ color: 'dark' }}
+            <Card
+              key={index}
+              variant="outlined"
+              sx={{
+                maxWidth: 500,
+                bgcolor: color,
+                color: componentTextColor,
+                height: "100%",
+                marginBottom: 1,
+                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                '&:hover': {
+                  boxShadow: '-5px -5px 5px rgba(0.5, 0.5, 0.5, 0.5)',
+                },
+              }}
+            >
+              <CardHeader
+                sx={{ color: 'dark' }}
                 avatar={<ArrowCircleRightIcon />}
                 action={
                   <IconButton aria-label="settings" onClick={(event) => handleSettingsClick(event, newEvent._id, newEvent.end)}>
@@ -155,7 +150,7 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
 const formatDate = (timestamp) => {
   const eventDate = new Date(timestamp);
   const year = eventDate.getFullYear();
-  const month = String(eventDate.getMonth() + 1).padStart(2, '0'); // Add leading zero if needed
+  const month = String(eventDate.getMonth() + 1).padStart(2, '0');
   const day = String(eventDate.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
@@ -171,14 +166,11 @@ const getDateColor = (dateDiff) => {
 };
 
 const getTextColor = (color) => {
-  if (color === '#ff0000') {
+  if (color === '#ff0000' || color === '#ff8fa3') {
     return "white";
-  } else if (color === '#ff8fa3') {
-    return "white"; 
   } else {
-    return "#f26419"; 
+    return "#f26419";
   }
 };
-
 
 export default MyCardtaskComponent;

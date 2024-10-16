@@ -75,20 +75,7 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-app.get('*', (req, res , next) => {
-  const token = req.cookies.token;
-  // console.log("here is done information about token --->", token);
-  if (!token) {
-    console.log("No token was found redirect to login page ")
-    return res.redirect('/'); // Redirect to login page
-  }
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded.user;
-    next();
-  } catch (err) {
-    console.log("Error verifying token:",err)
-    return res.redirect('/'); // Redirect to login page
-  }
+app.get('*', (req, res, next) => {
+  // Authentication logic
 });
 

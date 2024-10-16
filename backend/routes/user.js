@@ -10,15 +10,40 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 //middleware to verify token    
 
+// const auth = (req, res, next) => {
+//   const token = req.cookies.token; // Access the token from the HTTP-only cookie
+//   if (!token) {
+//     return res.status(401).json({ msg: 'No token, authorization denied' });
+//   }
+
+//   try {
+//     // Verify and decode the token
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     req.user = decoded.user; // Attach the decoded user info to req.user
+//     next();
+//   } catch (err) {
+//     console.error("Error verifying token:", err);
+//     return res.status(401).json({ msg: 'Token is not valid' });
+//   }
+// };
+
 const auth = (req, res, next) => {
-  const token = req.cookies.token; // Access the token from the HTTP-only cookie
-  if (!token) {
+  // Get token from the Authorization header
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) {
     return res.status(401).json({ msg: 'No token, authorization denied' });
+  }
+
+  // Extract the token from 'Bearer <token>'
+  const token = authHeader.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ msg: 'Token missing' });
   }
 
   try {
     // Verify and decode the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
+    console.log("decoded User : ---> ", decoded)
     req.user = decoded.user; // Attach the decoded user info to req.user
     next();
   } catch (err) {
@@ -39,7 +64,7 @@ router.get('/me', auth, async (req, res) => {
 });
 
 //get all events for each user 
-router.get('/:userId/allUsersEvents', auth, async (req, res) => {
+router.get('/allUsersEvents', auth, async (req, res) => {
   const userId = req.user.id;
   try {
     const user = await User.findById(userId);
@@ -57,7 +82,7 @@ router.get('/:userId/allUsersEvents', auth, async (req, res) => {
 
 
 // get all user information
-router.post("/:userId/AllUserInformation" , auth , async (req , res)=>{
+router.post("/AllUserInformation" , auth , async (req , res)=>{
   const userId = req.user.id;
   try {
     const user = await User.findById(userId);
@@ -71,7 +96,7 @@ router.post("/:userId/AllUserInformation" , auth , async (req , res)=>{
   }
 })
 // Add an event
-router.post('/:userId/events', auth, async (req, res) => {
+router.post('/events', auth, async (req, res) => {
   const userId = req.user.id;
   console.log("===> Before fetching user events ",userId)
   const { title, start, end } = req.body;
@@ -96,7 +121,7 @@ router.post('/:userId/events', auth, async (req, res) => {
 });
 
 // Add a finishedEvent 
-router.post('/:userId/finishedEvents', auth, async (req, res) => {
+router.post('/finishedEvents', auth, async (req, res) => {
   const userId = req.user.id;
   const { taskId, month } = req.body
   try {
@@ -119,7 +144,7 @@ router.post('/:userId/finishedEvents', auth, async (req, res) => {
 });
 
 // Get events
-router.get('/:userId/events', auth, async (req, res) => {
+router.get('/events', auth, async (req, res) => {
   const userId = req.user.id;
   try {
     const user = await User.findById(userId);
@@ -157,7 +182,7 @@ router.get('/:userId/userInformations' , auth , async (req , res)=>{
   }
 })
 
-router.get('/:userId/finishedEvents' , auth , async (req , res)=> {
+router.get('/finishedEvents' , auth , async (req , res)=> {
   const userId = req.user.id;
   try {
     const user = await User.findById(userId);
@@ -173,7 +198,7 @@ router.get('/:userId/finishedEvents' , auth , async (req , res)=> {
   } 
 })
 
-router.post('/:userId/delete-event', (req, res) => {
+router.post('/delete-event', (req, res) => {
   const eventId = req.body.eventId; // Get the event ID from the request body
   const userId = req.user.id;
 
