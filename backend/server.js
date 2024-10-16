@@ -39,7 +39,8 @@ const corsOptions = {
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   optionsSuccessStatus: 204,
 };
-
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle preflight requests
 app.use(cookieParser());
 // app.use(cors({
 //   origin: (origin, callback) => {
@@ -48,7 +49,7 @@ app.use(cookieParser());
 //   credentials: true,
 //   optionsSuccessStatus: 204
 // }));
-app.use(cors(corsOptions));
+
 // Middleware
 app.use(express.json());
 
