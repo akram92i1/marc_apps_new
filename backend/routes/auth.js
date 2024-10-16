@@ -60,7 +60,6 @@ router.post('/login', async (req, res) => {
 // check if the user still loged in with auth check 
 router.get('/auth-check', (req, res) => {
   const token = req.cookies.token;  // Get token from the cookie
-  console.log("Token from the cookie",token);
   if (!token) {
     return res.status(401).json({ msg: 'No token, authorization denied' });
   }

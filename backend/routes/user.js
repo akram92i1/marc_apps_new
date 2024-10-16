@@ -12,7 +12,6 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 const auth = (req, res, next) => {
   const token = req.cookies.token; // Access the token from the HTTP-only cookie
-  console.log("token",token)
   if (!token) {
     return res.status(401).json({ msg: 'No token, authorization denied' });
   }
@@ -21,7 +20,6 @@ const auth = (req, res, next) => {
     // Verify and decode the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded.user; // Attach the decoded user info to req.user
-    console.log("req user " , req.user.id);
     next();
   } catch (err) {
     console.error("Error verifying token:", err);
@@ -161,6 +159,7 @@ router.get('/:userId/userInformations' , auth , async (req , res)=>{
 
 router.get('/:userId/finishedEvents' , auth , async (req , res)=> {
   const userId = req.user.id;
+  console.log("8====D -- Before fetching user events ",userId)
   try {
     const user = await User.findById(userId);
     if (!user) {

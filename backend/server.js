@@ -10,21 +10,43 @@ const app = express();
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
+// const corsOptions = {
+//   origin: '*',
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+//   optionsSuccessStatus: 204
+// };
+
+
+const allowedOrigins = [
+  'http://localhost:5000', // Local development
+  'https://semer-le-present-f32d8fb5ce8e.herokuapp.com' ,// Production
+  "http://www.semerlepresent.net/" // Official website
+];
+
 const corsOptions = {
-  origin: '*',
+  origin: (origin, callback) => {
+    // If the origin is in the allowedOrigins array or if it's undefined (like in server-to-server requests), allow it
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
-  optionsSuccessStatus: 204
+  optionsSuccessStatus: 204,
 };
 
 app.use(cookieParser());
-app.use(cors({
-  origin: (origin, callback) => {
-    callback(null, true); // Allow all origins
-  },
-  credentials: true,
-  optionsSuccessStatus: 204
-}));
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     callback(null, true); // Allow all origins
+//   },
+//   credentials: true,
+//   optionsSuccessStatus: 204
+// }));
+app.use(cors(corsOptions));
 // Middleware
 app.use(express.json());
 
