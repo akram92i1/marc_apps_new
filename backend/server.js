@@ -19,9 +19,10 @@ require('dotenv').config();
 
 
 const allowedOrigins = [
-  'http://localhost:5000', // Local development
-  'https://semer-le-present-f32d8fb5ce8e.herokuapp.com' ,// Production
-  "http://www.semerlepresent.net/" // Official website
+  'http://localhost:5000',
+  'https://semer-le-present-f32d8fb5ce8e.herokuapp.com',
+  'http://www.semerlepresent.net',
+  'https://www.semerlepresent.net', // Include both HTTP and HTTPS if applicable
 ];
 
 const corsOptions = {
@@ -30,6 +31,7 @@ const corsOptions = {
     if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
+      console.log(`Blocked by CORS: ${origin}`); // For debugging
       callback(new Error('Not allowed by CORS'));
     }
   },
