@@ -159,7 +159,6 @@ router.get('/:userId/userInformations' , auth , async (req , res)=>{
 
 router.get('/:userId/finishedEvents' , auth , async (req , res)=> {
   const userId = req.user.id;
-  console.log("8====D -- Before fetching user events ",userId)
   try {
     const user = await User.findById(userId);
     if (!user) {

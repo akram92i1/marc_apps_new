@@ -40,8 +40,8 @@ router.post('/login', async (req, res) => {
       // Send the token in an HTTP-only cookie
       res.cookie('token', token, {
         httpOnly: true,                   // Cookie can't be accessed via JavaScript
-        secure: true , 
-        sameSite: 'None',                // CSRF protection
+        secure: false , 
+        SameSite:'Lax',              // CSRF protection
         path: '/',                         // Ensure the cookie is available for all routes
         maxAge: 60 * 60 * 1000,           // Expires in 1 hour (matching the JWT expiration)
       });
