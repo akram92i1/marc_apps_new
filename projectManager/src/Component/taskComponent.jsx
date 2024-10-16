@@ -24,7 +24,8 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
   useEffect(() => {
     const fetchNewFinishedEvents = async () => {
         const userId = await fetchUserId();
-              try {
+        
+      try {
         const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
           withCredentials: true, // Ensure cookies are sent with the request
         });
