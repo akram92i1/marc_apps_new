@@ -38,7 +38,7 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
     console.log("User id:", userId);
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, { taskId: selectedEvent }, {
+      await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents`, { taskId: selectedEvent }, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -56,45 +56,49 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
   };
 
   return (
-    <div>
-      {allFinishedEvents.map((event, index) => {
-        // Create a new event object with the desired start format
-        const newEvent = { ...event }; // Create a copy of the event object
-        newEvent.start = formatDate(newEvent.start); // Format the start date
-        newEvent.end = formatDate(newEvent.end);
-        return (
-          <div key={event._id}>
-            <Card
-              key={index}
-              variant="outlined"
-              sx={{
-                maxWidth: 500,
-                bgcolor: '#588157',
-                color: 'white',
-                height: "100%",
-                marginBottom: 1,
-                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                '&:hover': {
-                  boxShadow: '-5px -5px 5px rgba(0.5, 0.5, 0.5, 0.5)',
-                },
-              }}
-            >
-              <CardHeader
-                sx={{ color: 'white' }}
-                avatar={<FavoriteIcon />}
-                action={
-                  <IconButton aria-label="settings" onClick={(event) => handleSettingsClick(event, newEvent._id)}>
-                    <MoreVertIcon />
-                  </IconButton>
-                }
-                title={newEvent.title}
-                subheader={newEvent.start + " | " + newEvent.end}
-                subheaderTypographyProps={{ style: { color: 'white' } }}
-              />
-            </Card>
-          </div>
-        );
-      })}
+     <div>
+      {Array.isArray(allFinishedEvents) && allFinishedEvents.length > 0 ? (
+        allFinishedEvents.map((event, index) => {
+          // Create a new event object with the desired start format
+          const newEvent = { ...event }; // Create a copy of the event object
+          newEvent.start = formatDate(newEvent.start); // Format the start date
+          newEvent.end = formatDate(newEvent.end);
+          return (
+            <div key={event._id}>
+              <Card
+                key={index}
+                variant="outlined"
+                sx={{
+                  maxWidth: 500,
+                  bgcolor: '#588157',
+                  color: 'white',
+                  height: "100%",
+                  marginBottom: 1,
+                  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                  '&:hover': {
+                    boxShadow: '-5px -5px 5px rgba(0.5, 0.5, 0.5, 0.5)',
+                  },
+                }}
+              >
+                <CardHeader
+                  sx={{ color: 'white' }}
+                  avatar={<FavoriteIcon />}
+                  action={
+                    <IconButton aria-label="settings" onClick={(event) => handleSettingsClick(event, newEvent._id)}>
+                      <MoreVertIcon />
+                    </IconButton>
+                  }
+                  title={newEvent.title}
+                  subheader={newEvent.start + " | " + newEvent.end}
+                  subheaderTypographyProps={{ style: { color: 'white' } }}
+                />
+              </Card>
+            </div>
+          );
+        })
+      ) : (
+        <Typography sx={{ p: 2, color: 'gray' }}>Pas de tâches encore effectuées.</Typography>
+      )}
       <Popover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}

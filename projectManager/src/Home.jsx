@@ -92,6 +92,7 @@ export default function Home() {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
+                console.log("ALL FINISHED TASKS TEST ===> ",response.data)
                 setCompletedTasks(response.data);
             } catch (error) {
                 console.error(error);

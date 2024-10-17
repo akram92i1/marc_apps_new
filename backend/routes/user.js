@@ -163,7 +163,7 @@ router.get('/events', auth, async (req, res) => {
 });
 
 
-router.get('/:userId/userInformations' , auth , async (req , res)=>{
+router.get('/userInformations' , auth , async (req , res)=>{
   console.log("try to get some user informations !") ; 
   const userId = req.user.id; 
   try{
@@ -184,6 +184,7 @@ router.get('/:userId/userInformations' , auth , async (req , res)=>{
 
 router.get('/finishedEvents' , auth , async (req , res)=> {
   const userId = req.user.id;
+  console.log("after calling the finished events with the userid" , userId)
   try {
     const user = await User.findById(userId);
     if (!user) {
