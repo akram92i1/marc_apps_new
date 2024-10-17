@@ -51,7 +51,7 @@ export default function Home() {
                     return ;
                 }
                   // Make an authenticated request to check if the user is valid
-                  const response = await axios.get('http://localhost:5000/api/auth/auth-check', {
+                  const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/auth/auth-check', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
