@@ -20,7 +20,7 @@ export default function Home() {
     const [allUsersTask, setAllUsersTask] = useState([]);
     const [allUsersEvents, setAllUsersEvents] = useState([]);
     const [userInformations, setUserInformation] = useState([]);
-
+    const [authenticated, setAuthenticated] = useState(false);
     const navigate = useNavigate();
     useEffect(() => {
         const fetchEvents = async () => {
@@ -46,6 +46,7 @@ export default function Home() {
                 console.log("we are getting the token" , token)
                 if(!token) {
                     console.error("No token found, redercting to login");
+                    setAuthenticated(false);
                     navigate("/");
                     return ;
                 }
@@ -58,11 +59,11 @@ export default function Home() {
 
                 if(response.status === 200){
                     console.log("User authenticated --> ✔ ") ; 
-                   
-                    
+                    setAuthenticated(true);  // Set authenticated to true only if successful
                 }
             }catch (error){
                 console.error('Authentication failed or token expired:', error);
+                setAuthenticated(false);
                 navigate("/");
             }
         }
@@ -137,7 +138,7 @@ export default function Home() {
         fetchFinishedEvents();
         fetchUserInformation();
 
-    }, [navigate]);
+    }, [authenticated]);
 
     const fetchUserId = async () => {
         try {
