@@ -20,6 +20,7 @@ require('dotenv').config();
 
 const allowedOrigins = [
   'http://localhost:5000',
+  'http://localhost:3000',
   'https://semer-le-present-f32d8fb5ce8e.herokuapp.com',
   'http://www.semerlepresent.net',
   'https://www.semerlepresent.net', // Include both HTTP and HTTPS if applicable
@@ -75,7 +76,10 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-app.get('*', (req, res, next) => {
-  // Authentication logic
-});
+// Serve static files from the React app's build folder
+const reactAppPath = path.join(__dirname, '../projectManager/build');
+app.use(express.static(reactAppPath));
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(reactAppPath, 'index.html'));
+});

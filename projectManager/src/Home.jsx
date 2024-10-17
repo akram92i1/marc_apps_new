@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Card, Typography, Box, Divider } from '@mui/material';
+import {useNavigate} from 'react-router-dom' ; 
 import MyCalendar from './MyCalendar';
 import axios from 'axios';
 import MyCardtaskComponent from './Component/taskComponent';
@@ -20,6 +21,7 @@ export default function Home() {
     const [allUsersEvents, setAllUsersEvents] = useState([]);
     const [userInformations, setUserInformation] = useState([]);
 
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchEvents = async () => {
             const userId = await fetchUserId();
@@ -37,6 +39,33 @@ export default function Home() {
                 console.error(err);
             }
         };
+
+        const checkAuthentication = async () => {
+            try{
+                const token  = localStorage.getItem('token');
+                console.log("we are getting the token" , token)
+                if(!token) {
+                    console.error("No token found, redercting to login");
+                    navigate("/");
+                    return ;
+                }
+                  // Make an authenticated request to check if the user is valid
+                  const response = await axios.get('http://localhost:5000/api/auth/auth-check', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                if(response.status === 200){
+                    console.log("User authenticated --> ✔ ") ; 
+                   
+                    
+                }
+            }catch (error){
+                console.error('Authentication failed or token expired:', error);
+                navigate("/");
+            }
+        }
 
         const fetchUserInformation = async () => {
             const userId = await fetchUserId();
@@ -101,12 +130,13 @@ export default function Home() {
                 console.error(error);
             }
         };
-
+        checkAuthentication();
         fetchEvents();
         fetchAllUsersData();
         fetchFinishedEvents();
         fetchUserInformation();
-    }, []);
+
+    }, [navigate]);
 
     const fetchUserId = async () => {
         try {
@@ -211,7 +241,7 @@ export default function Home() {
                             background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)', elevation: 6
                         }}>
                             <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
-                                <Typography>Diagramme des taches</Typography>
+                                <Typography>Messagerie instantanée</Typography>
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                                 <ChatComponent></ChatComponent>
@@ -264,7 +294,7 @@ export default function Home() {
                     </Grid>
                     <Grid item xs={12} md={12} sx={{ height: '100%', justifyContent: 'center', textAlign: 'center' }}>
                         <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)', elevation: 6 }}>
-                            <p>Messagerie</p>
+                            <p>Tableaux des taches</p>
                             <Divider />
                             <br />
 
