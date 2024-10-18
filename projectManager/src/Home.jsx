@@ -25,8 +25,8 @@ export default function Home() {
     useEffect(() => {
         const fetchEvents = async () => {
             const userId = await fetchUserId();
-            console.log("userId in fetchEvents", userId);
-            console.log("userID", userId);
+            // console.log("userId in fetchEvents", userId);
+            // console.log("userID", userId);
             try {
                 const token = localStorage.getItem('token');
                 const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/events`, {
@@ -43,7 +43,7 @@ export default function Home() {
         const checkAuthentication = async () => {
             try{
                 const token  = localStorage.getItem('token');
-                console.log("we are getting the token" , token)
+                // console.log("we are getting the token" , token)
                 if(!token) {
                     console.error("No token found, redercting to login");
                     setAuthenticated(false);
@@ -58,7 +58,7 @@ export default function Home() {
                 });
 
                 if(response.status === 200){
-                    console.log("User authenticated --> ✔ ") ; 
+                    // console.log("User authenticated --> ✔ ") ; 
                     setAuthenticated(true);  // Set authenticated to true only if successful
                 }
             }catch (error){
@@ -77,7 +77,7 @@ export default function Home() {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                console.log("user information", response.data);
+                // console.log("user information", response.data);
                 setUserInformation([response.data.username, response.data.imageUrl]);
             } catch (error) {
                 console.error(error);
@@ -93,7 +93,6 @@ export default function Home() {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                console.log("ALL FINISHED TASKS TEST ===> ",response.data)
                 setCompletedTasks(response.data);
             } catch (error) {
                 console.error(error);
@@ -102,7 +101,7 @@ export default function Home() {
 
         const fetchAllUsersData = async () => {
             const userId = await fetchUserId();
-            console.log("The new userId with the token is", userId);
+            // console.log("The new userId with the token is", userId);
             try {
                 const token = localStorage.getItem('token');
                 const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/allUsersEvents`, {
@@ -110,8 +109,8 @@ export default function Home() {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                console.log('Response Status:', response.status);
-                console.log('Response Data:', response.data);
+                // console.log('Response Status:', response.status);
+                // console.log('Response Data:', response.data);
                 if (response.status === 200) {
                     const allDataUsers = [];
                     response.data.forEach((user) => {
@@ -148,7 +147,7 @@ export default function Home() {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            console.log("RESPONSE : =====> ", response);
+            // console.log("RESPONSE : =====> ", response);
             return response.data.user;
         } catch (err) {
             console.error("Error fetching user info:", err);
@@ -161,7 +160,7 @@ export default function Home() {
 
     const handleAddEvent = async (newEvent) => {
         const userId = await fetchUserId();
-        console.log(userId);
+        // console.log(userId);
         try {
             const token = localStorage.getItem('token');
             // Make a request to the server to save the event
@@ -183,7 +182,7 @@ export default function Home() {
 
     const buildAllEventsData = (data) => {
         const allDataUsers = [];
-        console.log("data", data);
+        // console.log("data", data);
         data.forEach((user) => {
             if (user.events && Array.isArray(user.events) && user.events.length > 0) {
                 user.events.forEach((event) => {
@@ -196,7 +195,7 @@ export default function Home() {
                 });
             }
         });
-        console.log("here is the returned value", allDataUsers);
+        // console.log("here is the returned value", allDataUsers);
         return allDataUsers;
     };
 
@@ -209,15 +208,15 @@ export default function Home() {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            console.log("here is data", response.data);
+            // console.log("here is data", response.data);
             setAllEvents(response.data);
         } catch (error) {
             console.error("Error:", error);
         }
     };
 
-    console.log("Events", allUsersEvents);
-    console.log("small events:", events);
+    // console.log("Events", allUsersEvents);
+    // console.log("small events:", events);
 
     return (
         <div>

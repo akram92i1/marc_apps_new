@@ -12,12 +12,14 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { useNavigate } from 'react-router-dom'; 
 const pages = ['Profile', 'Taches', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar({username , userImageUrl}) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();  // Initialize useNavigate for navigation
   React.useEffect(()=> { 
   },[])
   const handleOpenNavMenu = (event) => {
@@ -27,6 +29,7 @@ function Navbar({username , userImageUrl}) {
     setAnchorElUser(event.currentTarget);
   };
 
+
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
@@ -34,6 +37,13 @@ function Navbar({username , userImageUrl}) {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleLogout = () => {
+    // Clear the JWT token from localStorage
+    localStorage.removeItem('token');
+    // Redirect to the login page
+    navigate('/');
+  }
 
   return (
     <AppBar position="static" sx={{backgroundColor:"#ee6c4d"}}>
@@ -148,7 +158,7 @@ function Navbar({username , userImageUrl}) {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={setting === 'Logout' ? handleLogout : handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}

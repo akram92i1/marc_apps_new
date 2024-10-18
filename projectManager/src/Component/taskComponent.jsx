@@ -8,8 +8,9 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedEventMonth, setSelectedEventMonth] = useState(null);
+  const [removingEventId, setRemovingEventId] = useState(null); // Track event being removed
   const TaskState = ["Tache effectuée", "Tache supprimée"];
-
+  const [slideOut, setSlideOut] = useState(false); // Track animation state
   const handleSettingsClick = (event, eventId, eventEndDate) => {
     setAnchorEl(event.currentTarget);
     setSelectedEvent(eventId);
@@ -25,7 +26,7 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
       const userId = await fetchUserId();
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
+        const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -61,16 +62,23 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
     const userId = await fetchUserId();
     console.log("User ID:", userId);
     try {
-      await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/${userId}/finishedEvents`, {
-        taskId: selectedEvent,
-        month: selectedEventMonth,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      // Filter out the finished event from the current events
-      setEvents(allEvents.filter(event => event._id !== eventTaskId));
+       // Start the slide-out animation
+       setRemovingEventId(eventTaskId);
+       setSlideOut(true);
+            // Wait for the animation to complete before removing the item
+            setTimeout(async () => {
+              await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents`, {
+                taskId: selectedEvent,
+              }, {
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                },
+              });
+      
+              // Remove the event after the animation
+              setEvents((prevEvents) => prevEvents.filter(event => event._id !== eventTaskId));
+              setSlideOut(false); // Reset the animation state
+            }, 500); // 500ms, same as the animation duration
     } catch (error) {
       console.log("Error:", error);
     }
@@ -92,9 +100,11 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
         const dateDiff = Math.abs(startDate - today);
         const color = getDateColor(dateDiff);
         const componentTextColor = getTextColor(color);
-
+        const isRemoving = event._id === removingEventId;
         return (
-          <div key={event._id}>
+          <div key={event._id} 
+          className={`event-card ${isRemoving && slideOut ? 'slide-out' : ''}`} // Apply slide-out class when removing
+          >
             <Card
               key={index}
               variant="outlined"

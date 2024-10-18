@@ -10,6 +10,12 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const TaskState = ["Supprimer la tache", "Archiver Tache"];
+  const [selectedEventMonth, setSelectedEventMonth] = useState(null);
+  
+  useEffect(()=>{
+    //console.log("The content of allFinishedEvents..",allFinishedEvents)
+  });
+
 
   const handleSettingsClick = (event, eventId) => {
     setAnchorEl(event.currentTarget);
@@ -32,10 +38,9 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
   };
 
   const handleTasktClick = async () => {
-    console.log("----- change the state of an event ------");
     const eventTaskId = selectedEvent;
+    // Return the athenticated userID 
     const userId = await fetchUserId();
-    console.log("User id:", userId);
     try {
       const token = localStorage.getItem('token');
       await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents`, { taskId: selectedEvent }, {
@@ -51,10 +56,11 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
     }
   };
 
+
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  console.log("==================> .... ", typeof(allFinishedEvents));
   return (
      <div>
       {Array.isArray(allFinishedEvents) && allFinishedEvents.length > 0 ? (

@@ -38,3 +38,12 @@
     transform: rotate(360deg);
   }
 }
+
+.event-card {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.slide-out {
+  transform: translateX(-100%);
+  opacity: 0;
+}
