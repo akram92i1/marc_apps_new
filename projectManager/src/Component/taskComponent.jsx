@@ -90,7 +90,7 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
 
   return (
     <div>
-      {allEvents.map((event, index) => {
+      {Array.isArray(allEvents) && allEvents.length > 0 ? ( allEvents.map((event, index) => {
         const newEvent = { ...event };
         newEvent.start = formatDate(newEvent.start);
         newEvent.end = formatDate(newEvent.end);
@@ -135,7 +135,20 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
             </Card>
           </div>
         );
-      })}
+      }) ): (
+        <Typography  sx={{ 
+          p: 1, // Adjust the padding
+          color: 'gray', 
+          fontSize: '1rem', // Adjust the font size
+          textAlign: 'center', 
+          margin: 'auto', 
+          overflow: 'hidden', // Prevent overflow
+          textOverflow: 'ellipsis', // Add ellipsis if the text is too long
+          whiteSpace: 'nowrap', // Prevent the text from wrapping to the next line
+          width: '100%',
+          fontWeight: 500 
+        }}>Pas de tâches encore ajoutées.</Typography>
+      )}
       <Popover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}

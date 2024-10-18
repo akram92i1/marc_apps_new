@@ -272,7 +272,7 @@ export default function Home() {
                     {/* Todo Bar */}
                     <Grid item xs={12} md={2} sx={{ height: '100%', justifyContent: 'flex-end' }}>
                         <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)', elevation: 6 }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'center' , marginBottom: 2  }}>
                                 Taches courante
                             </Box>
                             <Divider />

@@ -60,7 +60,6 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log("==================> .... ", typeof(allFinishedEvents));
   return (
      <div>
       {Array.isArray(allFinishedEvents) && allFinishedEvents.length > 0 ? (
@@ -103,7 +102,18 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
           );
         })
       ) : (
-        <Typography sx={{ p: 2, color: 'gray' }}>Pas de tâches encore effectuées.</Typography>
+        <Typography  sx={{ 
+          p: 1, // Adjust the padding
+          color: 'gray', 
+          fontSize: '1rem', // Adjust the font size
+          textAlign: 'center', 
+          margin: 'auto', 
+          overflow: 'hidden', // Prevent overflow
+          textOverflow: 'ellipsis', // Add ellipsis if the text is too long
+          whiteSpace: 'nowrap', // Prevent the text from wrapping to the next line
+          width: '100%',
+          fontWeight: 500 
+        }}>Pas de tâches encore effectuées.</Typography>
       )}
       <Popover
         open={Boolean(anchorEl)}
