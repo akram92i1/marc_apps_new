@@ -11,6 +11,7 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
   const [removingEventId, setRemovingEventId] = useState(null); // Track event being removed
   const TaskState = ["Tache effectuée", "Tache supprimée"];
   const [slideOut, setSlideOut] = useState(false); // Track animation state
+
   const handleSettingsClick = (event, eventId, eventEndDate) => {
     setAnchorEl(event.currentTarget);
     setSelectedEvent(eventId);
@@ -38,7 +39,6 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
     };
 
     fetchNewFinishedEvents();
-    console.log("Component has changed");
   }, [allEvents, setFinishedEvents]);
 
   const fetchUserId = async () => {
@@ -56,29 +56,25 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
   };
 
   const handleTasktClick = async () => {
-    console.log("----- Change the state of an event ------");
     const eventTaskId = selectedEvent;
     const token = localStorage.getItem('token');
     const userId = await fetchUserId();
-    console.log("User ID:", userId);
+
     try {
-       // Start the slide-out animation
-       setRemovingEventId(eventTaskId);
-       setSlideOut(true);
-            // Wait for the animation to complete before removing the item
-            setTimeout(async () => {
-              await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents`, {
-                taskId: selectedEvent,
-              }, {
-                headers: {
-                  'Authorization': `Bearer ${token}`,
-                },
-              });
-      
-              // Remove the event after the animation
-              setEvents((prevEvents) => prevEvents.filter(event => event._id !== eventTaskId));
-              setSlideOut(false); // Reset the animation state
-            }, 500); // 500ms, same as the animation duration
+      setRemovingEventId(eventTaskId);
+      setSlideOut(true);
+      setTimeout(async () => {
+        await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents`, {
+          taskId: selectedEvent,
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        setEvents((prevEvents) => prevEvents.filter(event => event._id !== eventTaskId));
+        setSlideOut(false); 
+      }, 500); 
     } catch (error) {
       console.log("Error:", error);
     }
@@ -90,64 +86,71 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
 
   return (
     <div>
-      {Array.isArray(allEvents) && allEvents.length > 0 ? ( allEvents.map((event, index) => {
-        const newEvent = { ...event };
-        newEvent.start = formatDate(newEvent.start);
-        newEvent.end = formatDate(newEvent.end);
+      {Array.isArray(allEvents) && allEvents.length > 0 ? (
+        allEvents.map((event, index) => {
+          const newEvent = { ...event };
+          newEvent.start = formatDate(newEvent.start);
+          newEvent.end = formatDate(newEvent.end);
 
-        const today = new Date();
-        const startDate = new Date(event.start);
-        const dateDiff = Math.abs(startDate - today);
-        const color = getDateColor(dateDiff);
-        const componentTextColor = getTextColor(color);
-        const isRemoving = event._id === removingEventId;
-        return (
-          <div key={event._id} 
-          className={`event-card ${isRemoving && slideOut ? 'slide-out' : ''}`} // Apply slide-out class when removing
-          >
-            <Card
-              key={index}
-              variant="outlined"
-              sx={{
-                maxWidth: 500,
-                bgcolor: color,
-                color: componentTextColor,
-                height: "100%",
-                marginBottom: 1,
-                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                '&:hover': {
-                  boxShadow: '-5px -5px 5px rgba(0.5, 0.5, 0.5, 0.5)',
-                },
-              }}
-            >
-              <CardHeader
-                sx={{ color: 'dark' }}
-                avatar={<ArrowCircleRightIcon />}
-                action={
-                  <IconButton aria-label="settings" onClick={(event) => handleSettingsClick(event, newEvent._id, newEvent.end)}>
-                    <MoreVertIcon />
-                  </IconButton>
-                }
-                title={newEvent.title}
-                subheader={newEvent.start + " | " + newEvent.end}
-                subheaderTypographyProps={{ style: { color: '#ff6700' } }}
-              />
-            </Card>
-          </div>
-        );
-      }) ): (
-        <Typography  sx={{ 
-          p: 1, // Adjust the padding
-          color: 'gray', 
-          fontSize: '1rem', // Adjust the font size
-          textAlign: 'center', 
-          margin: 'auto', 
-          overflow: 'hidden', // Prevent overflow
-          textOverflow: 'ellipsis', // Add ellipsis if the text is too long
-          whiteSpace: 'nowrap', // Prevent the text from wrapping to the next line
-          width: '100%',
-          fontWeight: 500 
-        }}>Pas de tâches encore ajoutées.</Typography>
+          const today = new Date();
+          const startDate = new Date(event.start);
+          const dateDiff = Math.abs(startDate - today);
+          const color = getDateColor(dateDiff);
+          const componentTextColor = getTextColor(color);
+          const isRemoving = event._id === removingEventId;
+
+          return (
+            <div key={event._id} className={`event-card ${isRemoving && slideOut ? 'slide-out' : ''}`}>
+              <Card
+                key={index}
+                variant="outlined"
+                sx={{
+                  maxWidth: 500,
+                  bgcolor: color,
+                  color: componentTextColor,
+                  height: "100%",
+                  marginBottom: 1,
+                  padding: 2,
+                  borderRadius: 2,
+                  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                  '&:hover': {
+                    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                  },
+                }}
+              >
+                <CardHeader
+                  sx={{ color: componentTextColor }}
+                  avatar={<ArrowCircleRightIcon sx={{ color: '#4f4f4f' }} />}
+                  action={
+                    <IconButton aria-label="settings" onClick={(event) => handleSettingsClick(event, newEvent._id, newEvent.end)}>
+                      <MoreVertIcon sx={{ color: '#4f4f4f' }} />
+                    </IconButton>
+                  }
+                  title={newEvent.title}
+                  subheader={newEvent.start + " | " + newEvent.end}
+                  subheaderTypographyProps={{ style: { color: '#4f4f4f', fontSize: '0.9rem' } }}
+                />
+              </Card>
+            </div>
+          );
+        })
+      ) : (
+        <Typography
+          sx={{
+            p: 1,
+            color: 'gray',
+            fontSize: '1rem',
+            textAlign: 'center',
+            margin: 'auto',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            width: '100%',
+            fontWeight: 500,
+          }}
+        >
+          Pas de tâches encore ajoutées.
+        </Typography>
       )}
       <Popover
         open={Boolean(anchorEl)}
@@ -169,7 +172,6 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
   );
 };
 
-// Function to format the date
 const formatDate = (timestamp) => {
   const eventDate = new Date(timestamp);
   const year = eventDate.getFullYear();
@@ -179,20 +181,20 @@ const formatDate = (timestamp) => {
 };
 
 const getDateColor = (dateDiff) => {
-  if (dateDiff < 86400000) { // less than 1 day
-    return '#ff0000'; // red
-  } else if (dateDiff < 604800000) { // less than 1 week
-    return '#ff8fa3'; // orange
+  if (dateDiff < 86400000) { 
+    return '#ffcccb'; // soft red for urgent tasks
+  } else if (dateDiff < 604800000) { 
+    return '#ffd580'; // light orange for moderately urgent tasks
   } else {
-    return '#a2d2ff'; // blue
+    return '#d4f1f4'; // light blue for less urgent tasks
   }
 };
 
 const getTextColor = (color) => {
-  if (color === '#ff0000' || color === '#ff8fa3') {
-    return "white";
+  if (color === '#ffcccb' || color === '#ffd580') {
+    return "#4f4f4f"; // dark gray for contrast on lighter backgrounds
   } else {
-    return "#f26419";
+    return "#1e3a4f"; // darker blue text for blue background
   }
 };
 

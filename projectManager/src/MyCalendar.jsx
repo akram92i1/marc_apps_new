@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, momentLocalizer   } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -9,6 +9,10 @@ const MyCalendar = ({ events, onAddEvent }) => {
   const [title, setTitle] = useState('');
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
+
+  useEffect(()=> {
+    console.log("we send those data to the calendar ===> " , events);
+  });
 
   const handleAddEvent = () => {
     const newEvent = { title, start: new Date(start), end: new Date(end) };
@@ -21,10 +25,11 @@ const MyCalendar = ({ events, onAddEvent }) => {
   // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
 const localizer = momentLocalizer(moment) // or globalizeLocalizer
+console.log("Here we have the events that will be printed " , events) ; 
 const eventsWithDateObjects = events.map((event) => ({
   ...event,
-  start: moment(event.start).toDate(),
-  end: moment(event.end).toDate(),
+  start: new Date(event.start),
+  end: new Date(event.end)
 }));
   return (
     <div style={{ height: '90vh', width: '100%' }}>
@@ -78,6 +83,4 @@ const eventsWithDateObjects = events.map((event) => ({
     </div>
   );
 };
-
-
 export default MyCalendar;

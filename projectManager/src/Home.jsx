@@ -34,6 +34,7 @@ export default function Home() {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
+                console.log("The current user event is set as follow "  , response.data); 
                 setEvents(response.data);
             } catch (err) {
                 console.error(err);

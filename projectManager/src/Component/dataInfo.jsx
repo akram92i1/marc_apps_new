@@ -1,37 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Typography, CardHeader, Popover } from "@mui/material";
-import CardContent from '@mui/material/CardContent';
+import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Task';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import IconButton from '@mui/material/IconButton';
 import axios from 'axios';
 
 const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const TaskState = ["Supprimer la tache", "Archiver Tache"];
-  const [selectedEventMonth, setSelectedEventMonth] = useState(null);
   
-  useEffect(()=>{
-    //console.log("The content of allFinishedEvents..",allFinishedEvents)
-  });
-
-
   const handleSettingsClick = (event, eventId) => {
     setAnchorEl(event.currentTarget);
     setSelectedEvent(eventId);
-    console.log(eventId);
   };
 
   const fetchUserId = async () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/me', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+        headers: { 'Authorization': `Bearer ${token}` },
       });
-      return response.data.user; // Return the user ID from the response
+      return response.data.user;
     } catch (err) {
       console.error("Error fetching user info:", err);
     }
@@ -39,81 +29,78 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
 
   const handleTasktClick = async () => {
     const eventTaskId = selectedEvent;
-    // Return the athenticated userID 
     const userId = await fetchUserId();
     try {
       const token = localStorage.getItem('token');
       await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents`, { taskId: selectedEvent }, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+        headers: { 'Authorization': `Bearer ${token}` },
       });
 
-      // Filter out the finished event from the current events
       setFinishedEvents(allFinishedEvents.filter(event => event._id !== eventTaskId));
     } catch (error) {
       console.log("Error:", error);
     }
   };
 
-
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
-     <div>
+    <div>
       {Array.isArray(allFinishedEvents) && allFinishedEvents.length > 0 ? (
         allFinishedEvents.map((event, index) => {
-          // Create a new event object with the desired start format
-          const newEvent = { ...event }; // Create a copy of the event object
-          newEvent.start = formatDate(newEvent.start); // Format the start date
+          const newEvent = { ...event };
+          newEvent.start = formatDate(newEvent.start);
           newEvent.end = formatDate(newEvent.end);
           return (
             <div key={event._id}>
               <Card
-                key={index}
-                variant="outlined"
-                sx={{
-                  maxWidth: 500,
-                  bgcolor: '#588157',
-                  color: 'white',
-                  height: "100%",
-                  marginBottom: 1,
-                  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                  '&:hover': {
-                    boxShadow: '-5px -5px 5px rgba(0.5, 0.5, 0.5, 0.5)',
-                  },
-                }}
-              >
-                <CardHeader
-                  sx={{ color: 'white' }}
-                  avatar={<FavoriteIcon />}
-                  action={
-                    <IconButton aria-label="settings" onClick={(event) => handleSettingsClick(event, newEvent._id)}>
-                      <MoreVertIcon />
-                    </IconButton>
-                  }
-                  title={newEvent.title}
-                  subheader={newEvent.start + " | " + newEvent.end}
-                  subheaderTypographyProps={{ style: { color: 'white' } }}
-                />
-              </Card>
+  key={index}
+  variant="outlined"
+  sx={{
+    maxWidth: 500,
+    bgcolor: '#e0f7e9', // Light green background to fit the white theme
+    color: '#4f4f4f',  // Gray text to fit the theme
+    height: "100%",
+    marginBottom: 2,
+    padding: 2,
+    borderRadius: 2,  // Smooth rounded corners
+    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',  // Light shadow for a subtle 3D effect
+    '&:hover': {
+      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.15)',  // Slightly deeper shadow on hover
+    },
+  }}
+>
+  <CardHeader
+    sx={{ color: '#4f4f4f' }} // Gray text for the header
+    avatar={<FavoriteIcon sx={{ color: '#81c784' }} />}  // Light green icon to fit the theme
+    action={
+      <IconButton aria-label="settings" onClick={(event) => handleSettingsClick(event, newEvent._id)}>
+        <MoreVertIcon sx={{ color: '#81c784' }} />  {/* Light green settings icon */}
+      </IconButton>
+    }
+    title={newEvent.title}
+    subheader={newEvent.start + " | " + newEvent.end}
+    subheaderTypographyProps={{ style: { color: '#757575', fontSize: '0.9rem' } }}  // Gray subheader text
+  />
+</Card>
+
             </div>
           );
         })
       ) : (
-        <Typography  sx={{ 
-          p: 1, // Adjust the padding
-          color: 'gray', 
-          fontSize: '1rem', // Adjust the font size
-          textAlign: 'center', 
-          margin: 'auto', 
-          overflow: 'hidden', // Prevent overflow
-          textOverflow: 'ellipsis', // Add ellipsis if the text is too long
-          whiteSpace: 'nowrap', // Prevent the text from wrapping to the next line
+        <Typography sx={{
+          p: 2,
+          color: 'gray',
+          fontSize: '1.1rem',
+          textAlign: 'center',
+          margin: 'auto',
           width: '100%',
-          fontWeight: 500 
-        }}>Pas de tâches encore effectuées.</Typography>
+          fontWeight: 500,
+        }}>
+          Pas de tâches encore effectuées.
+        </Typography>
       )}
       <Popover
         open={Boolean(anchorEl)}
@@ -135,11 +122,10 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
   );
 };
 
-// Function to format the date
 const formatDate = (timestamp) => {
   const eventDate = new Date(timestamp);
   const year = eventDate.getFullYear();
-  const month = String(eventDate.getMonth() + 1).padStart(2, '0'); // Add leading zero if needed
+  const month = String(eventDate.getMonth() + 1).padStart(2, '0');
   const day = String(eventDate.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
