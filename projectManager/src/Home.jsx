@@ -21,6 +21,7 @@ export default function Home() {
     const [allUsersEvents, setAllUsersEvents] = useState([]);
     const [userInformations, setUserInformation] = useState([]);
     const [authenticated, setAuthenticated] = useState(false);
+    const [isSpecialUser, setIsSpecialUser] = useState(false);
     const navigate = useNavigate();
     useEffect(() => {
         const fetchEvents = async () => {
@@ -80,6 +81,12 @@ export default function Home() {
                 });
                 // console.log("user information", response.data);
                 setUserInformation([response.data.username, response.data.imageUrl]);
+                const username = response.data.username ; 
+                // Check if the username is the special user
+                if (username === 'marclavigne2020@gmail.com') {
+                    setIsSpecialUser(true); // Set the special user state to true if it matches
+                }
+           
             } catch (error) {
                 console.error(error);
             }
@@ -294,16 +301,18 @@ export default function Home() {
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid item xs={12} md={12} sx={{ height: '100%', justifyContent: 'center', textAlign: 'center' }}>
-                        <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)', elevation: 6 }}>
-                            <p>Tableaux des taches</p>
-                            <Divider />
-                            <br />
-
-                            <UsersTasksTable />
-
-                        </Box>
-                    </Grid>
+                     {/* Special Section - Only for special user */}
+                     {isSpecialUser && (
+                        <Grid item xs={12} md={12} sx={{ height: '100%', justifyContent: 'center', textAlign: 'center' }}>
+                            <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)', elevation: 6 }}>
+                                <p>Section spéciale pour l'utilisateur : marclavigne2020@gmail.com
+                                </p>
+                                <Divider />
+                                <br />
+                                <UsersTasksTable />
+                            </Box>
+                        </Grid>
+                    )}
                 </Grid>
             </Box>
         </div>

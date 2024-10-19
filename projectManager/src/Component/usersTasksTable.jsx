@@ -1,44 +1,101 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import MUIDataTable from 'mui-datatables';
 import {
+    Button,
     createTheme,
     StyledEngineProvider,
     ThemeProvider
-  } from "@mui/styles";
+  } from "@mui/material";
+import axios from 'axios';
+
+const UsersTasksTable = () => {
+  const [data, setData] = useState([]); // State to hold the fetched data
+
+  useEffect(() => {
+    // Fetch data from the endpoint (replace with your actual endpoint)
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token'); // Assuming token is needed
+        const response = await axios.get('https://your-api-endpoint.com/api/users/tasks', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        
+        // Transform the data as per your structure
+        const formattedData = response.data.map(task => ({
+          Nom: task.name,
+          mail: task.email,
+          tache: task.taskTitle,
+          action: (
+            <Button 
+              variant="contained" 
+              color="primary"
+              onClick={() => verifyTask(task._id)}
+            >
+              Tache vérifier
+            </Button>
+          )
+        }));
+
+        setData(formattedData);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    //fetchData();
+  }, []);
+
+  // Function to handle task verification button click
+  const verifyTask = (taskId) => {
+    console.log("Task verified:", taskId);
+    // You can implement further actions like making an API call to update the task status
+  };
 
   const columns = [
     {
-      name: "hero",
-      label: "Superhero",
+      name: "Nom",
+      label: "Nom",
       options: {
         filter: true,
         sort: true
       }
     },
     {
-      name: "name",
-      label: "Name",
+      name: "mail",
+      label: "Email",
       options: {
         filter: true,
+        sort: true
+      }
+    },
+    {
+      name: "tache",
+      label: "Tâche",
+      options: {
+        filter: true,
+        sort: true
+      }
+    },
+    {
+      name: "action",
+      label: "Action",
+      options: {
+        filter: false,
         sort: false
       }
     }
   ];
-  
-  const data = [
-    { name: "Bruce Wayne", hero: "Batman" },
-    { name: "Clark kent", hero: "Superman" },
-    { name: "Arthur Curry", hero: "Aquaman" }
-  ];
-  
+
   const options = {
     responsive: "standard"
   };
-const UsersTasksTable = () => {
+
   return (
     <div>
       <MUIDataTable
-          title={"Superheros List"}
+          title={"Liste des Tâches"}
           data={data}
           columns={columns}
           options={options}
@@ -47,4 +104,4 @@ const UsersTasksTable = () => {
   )
 }
 
-export default UsersTasksTable ; 
+export default UsersTasksTable;

@@ -31,6 +31,34 @@ const eventsWithDateObjects = events.map((event) => ({
   start: new Date(event.start),
   end: new Date(event.end)
 }));
+
+// Function to customize the event style
+const eventStyleGetter = (event, start, end, isSelected) => {
+  const today = new Date();
+  let backgroundColor = '#3174ad'; // default color
+  let textColor = 'white';
+
+  // Compare event start date with today's date
+  if (start < today) {
+    backgroundColor = 'black'; // Color for past events
+  } else if (start >= today && start < today.setDate(today.getDate() + 7)) {
+    backgroundColor = '#ff8c00'; // Orange for upcoming events within 7 days
+  } else {
+    backgroundColor = '#32cd32'; // Green for future events
+  }
+
+
+  return {
+    style: {
+      backgroundColor,
+      color: 'white',
+      borderRadius: '5px',
+      border: 'none',
+      display: 'block',
+    },
+  };
+};
+
   return (
     <div style={{ height: '90vh', width: '100%' }}>
       <Calendar
@@ -38,6 +66,7 @@ const eventsWithDateObjects = events.map((event) => ({
       localizer={localizer}
       startAccessor="start"
       endAccessor="end"
+      eventPropGetter={eventStyleGetter}
       style={{ height: 700 }}
     />
       <Box

@@ -8,9 +8,9 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedEventMonth, setSelectedEventMonth] = useState(null);
-  const [removingEventId, setRemovingEventId] = useState(null); // Track event being removed
-  const TaskState = ["Tache effectuée", "Tache supprimée"];
-  const [slideOut, setSlideOut] = useState(false); // Track animation state
+  const [removingEventId, setRemovingEventId] = useState(null);
+  const TaskState = ["Tache effectuée"];
+  const [slideOut, setSlideOut] = useState(false);
 
   const handleSettingsClick = (event, eventId, eventEndDate) => {
     setAnchorEl(event.currentTarget);
@@ -28,16 +28,13 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+          headers: { 'Authorization': `Bearer ${token}` },
         });
         setFinishedEvents(response.data);
       } catch (error) {
         console.error("Error fetching finished events:", error);
       }
     };
-
     fetchNewFinishedEvents();
   }, [allEvents, setFinishedEvents]);
 
@@ -45,11 +42,9 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/me', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+        headers: { 'Authorization': `Bearer ${token}` },
       });
-      return response.data.user; // Return the user ID from the response
+      return response.data.user;
     } catch (err) {
       console.error("Error fetching user info:", err);
     }
@@ -67,14 +62,12 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
         await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents`, {
           taskId: selectedEvent,
         }, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+          headers: { 'Authorization': `Bearer ${token}` },
         });
 
         setEvents((prevEvents) => prevEvents.filter(event => event._id !== eventTaskId));
-        setSlideOut(false); 
-      }, 500); 
+        setSlideOut(false);
+      }, 500);
     } catch (error) {
       console.log("Error:", error);
     }
@@ -165,8 +158,19 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
           horizontal: 'right',
         }}
       >
-        <Typography sx={{ p: 2 }} onClick={handleTasktClick}>{TaskState[0]}</Typography>
-        <Typography sx={{ p: 2 }}>{TaskState[1]}</Typography>
+        <Typography
+          sx={{
+            p: 2,
+            cursor: 'pointer',
+            transition: 'box-shadow 0.3s ease-in-out',
+            '&:hover': {
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+            },
+          }}
+          onClick={handleTasktClick}
+        >
+          {TaskState[0]}
+        </Typography>
       </Popover>
     </div>
   );
@@ -181,9 +185,9 @@ const formatDate = (timestamp) => {
 };
 
 const getDateColor = (dateDiff) => {
-  if (dateDiff < 86400000) { 
+  if (dateDiff < 86400000) {
     return '#ffcccb'; // soft red for urgent tasks
-  } else if (dateDiff < 604800000) { 
+  } else if (dateDiff < 604800000) {
     return '#ffd580'; // light orange for moderately urgent tasks
   } else {
     return '#d4f1f4'; // light blue for less urgent tasks

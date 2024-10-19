@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Typography, CardHeader, Popover } from "@mui/material";
+import { Card, Typography, CardHeader } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Task';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import PendingActionsIcon from '@mui/icons-material/PendingActions'; // Icon for pending status
 import axios from 'axios';
 
 const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const TaskState = ["Supprimer la tache", "Archiver Tache"];
-  
-  const handleSettingsClick = (event, eventId) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedEvent(eventId);
-  };
 
   const fetchUserId = async () => {
     try {
@@ -42,10 +35,6 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
     }
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <div>
       {Array.isArray(allFinishedEvents) && allFinishedEvents.length > 0 ? (
@@ -56,68 +45,55 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
           return (
             <div key={event._id}>
               <Card
-  key={index}
-  variant="outlined"
-  sx={{
-    maxWidth: 500,
-    bgcolor: '#e0f7e9', // Light green background to fit the white theme
-    color: '#4f4f4f',  // Gray text to fit the theme
-    height: "100%",
-    marginBottom: 2,
-    padding: 2,
-    borderRadius: 2,  // Smooth rounded corners
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',  // Light shadow for a subtle 3D effect
-    '&:hover': {
-      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.15)',  // Slightly deeper shadow on hover
-    },
-  }}
->
-  <CardHeader
-    sx={{ color: '#4f4f4f' }} // Gray text for the header
-    avatar={<FavoriteIcon sx={{ color: '#81c784' }} />}  // Light green icon to fit the theme
-    action={
-      <IconButton aria-label="settings" onClick={(event) => handleSettingsClick(event, newEvent._id)}>
-        <MoreVertIcon sx={{ color: '#81c784' }} />  {/* Light green settings icon */}
-      </IconButton>
-    }
-    title={newEvent.title}
-    subheader={newEvent.start + " | " + newEvent.end}
-    subheaderTypographyProps={{ style: { color: '#757575', fontSize: '0.9rem' } }}  // Gray subheader text
-  />
-</Card>
-
+                key={index}
+                variant="outlined"
+                sx={{
+                  maxWidth: 500,
+                  bgcolor: '#e0f7e9', // Light green background to fit the white theme
+                  color: '#4f4f4f',  // Gray text to fit the theme
+                  height: "100%",
+                  marginBottom: 2,
+                  padding: 2,
+                  borderRadius: 2,  // Smooth rounded corners
+                  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',  // Light shadow for a subtle 3D effect
+                  '&:hover': {
+                    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.15)',  // Slightly deeper shadow on hover
+                  },
+                }}
+              >
+                <CardHeader
+                  sx={{ color: '#4f4f4f' }} // Gray text for the header
+                  avatar={<FavoriteIcon sx={{ color: '#81c784' }} />}  // Light green icon to fit the theme
+                  // Replace the settings action with the PendingActionsIcon
+                  action={
+                    <PendingActionsIcon sx={{ color: '#ff9800' }} />  // Orange pending validation icon
+                  }
+                  title={newEvent.title}
+                  subheader={newEvent.start + " | " + newEvent.end}
+                  subheaderTypographyProps={{ style: { color: '#757575', fontSize: '0.9rem' } }}  // Gray subheader text
+                />
+              </Card>
             </div>
           );
         })
       ) : (
-        <Typography sx={{
-          p: 2,
-          color: 'gray',
-          fontSize: '1.1rem',
-          textAlign: 'center',
-          margin: 'auto',
-          width: '100%',
-          fontWeight: 500,
-        }}>
+        <Typography
+          sx={{
+            p: 1,
+            color: 'gray',
+            fontSize: '1rem',
+            textAlign: 'center',
+            margin: 'auto',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            width: '100%',
+            fontWeight: 500,
+          }}
+        >
           Pas de tâches encore effectuées.
         </Typography>
       )}
-      <Popover
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <Typography sx={{ p: 2 }} onClick={handleTasktClick}>{TaskState[0]}</Typography>
-        <Typography sx={{ p: 2 }}>{TaskState[1]}</Typography>
-      </Popover>
     </div>
   );
 };

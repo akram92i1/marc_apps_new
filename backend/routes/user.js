@@ -219,3 +219,31 @@ router.post('/delete-event', (req, res) => {
   );
 });
 module.exports = router;
+
+// Get finished events for each user
+router.get('/userFinishedEvents', auth, async (req, res) => {
+  const userId = req.user.id;
+  try {
+    // Fetch the authenticated user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    // Check if user has events and finishedEvents
+    if (!user.events || !user.finishedEvents) {
+      return res.status(200).json({ msg: 'No events or finished events found' });
+    }
+
+    // Get all task IDs from finishedEvents
+    const finishedTaskIds = user.finishedEvents.map(event => event.taskId);
+
+    // Filter user's events to return only finished events
+    const finishedEvents = user.events.filter(event => finishedTaskIds.includes(event._id.toString()));
+
+    return res.status(200).json(finishedEvents);
+  } catch (err) {
+    console.error(err.message);
+    return res.status(500).send('Server error');
+  }
+});
