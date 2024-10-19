@@ -16,35 +16,35 @@ const UsersTasksTable = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token'); // Assuming token is needed
-        const response = await axios.get('https://your-api-endpoint.com/api/users/tasks', {
+        const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/allUsersFinishedEvents', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
         });
-        
+      console.log("Response" , response.data )
         // Transform the data as per your structure
-        const formattedData = response.data.map(task => ({
-          Nom: task.name,
-          mail: task.email,
-          tache: task.taskTitle,
-          action: (
-            <Button 
-              variant="contained" 
-              color="primary"
-              onClick={() => verifyTask(task._id)}
-            >
-              Tache vérifier
-            </Button>
-          )
-        }));
+        // const formattedData = response.data.map(task => ({
+        //   Nom: task.name,
+        //   mail: task.email,
+        //   tache: task.taskTitle,
+        //   action: (
+        //     <Button 
+        //       variant="contained" 
+        //       color="primary"
+        //       onClick={() => verifyTask(task._id)}
+        //     >
+        //       Tache vérifier
+        //     </Button>
+        //   )
+        // }));
 
-        setData(formattedData);
+        //setData(formattedData);
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }
     };
 
-    //fetchData();
+  fetchData();
   }, []);
 
   // Function to handle task verification button click

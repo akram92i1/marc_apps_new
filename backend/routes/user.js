@@ -220,30 +220,33 @@ router.post('/delete-event', (req, res) => {
 });
 module.exports = router;
 
-// Get finished events for each user
-router.get('/userFinishedEvents', auth, async (req, res) => {
-  const userId = req.user.id;
+
+// Get finished events for all users
+router.get('/allUsersFinishedEvents', auth, async (req, res) => {
   try {
-    // Fetch the authenticated user
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ msg: 'User not found' });
-    }
+    // Find all users and populate their events and finishedEvents
+    const users = await User.find().populate('events').populate('finishedEvents');
 
-    // Check if user has events and finishedEvents
-    if (!user.events || !user.finishedEvents) {
-      return res.status(200).json({ msg: 'No events or finished events found' });
-    }
+    // Map through each user and filter out only their finished events
+    const usersWithFinishedEvents = users.map(user => {
+      // Get all task IDs from finishedEvents
+      const finishedTaskIds = user.finishedEvents.map(event => event.taskId);
 
-    // Get all task IDs from finishedEvents
-    const finishedTaskIds = user.finishedEvents.map(event => event.taskId);
+      // Filter user's events to return only finished events
+      const finishedEvents = user.events.filter(event => finishedTaskIds.includes(event._id.toString()));
 
-    // Filter user's events to return only finished events
-    const finishedEvents = user.events.filter(event => finishedTaskIds.includes(event._id.toString()));
+      return {
+        username: user.username,
+        email: user.email,
+        profilePic: user.profilePic,
+        finishedEvents: finishedEvents,  // Return only finished events for each user
+      };
+    });
 
-    return res.status(200).json(finishedEvents);
+    return res.status(200).json(usersWithFinishedEvents);
   } catch (err) {
     console.error(err.message);
     return res.status(500).send('Server error');
   }
 });
+
