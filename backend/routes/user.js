@@ -234,7 +234,6 @@ router.get('/allUsersFinishedEvents', auth, async (req, res) => {
 
       // Filter user's events to return only finished events
       const finishedEvents = user.events.filter(event => finishedTaskIds.includes(event._id.toString()));
-
       return {
         username: user.username,
         email: user.email,
@@ -242,11 +241,11 @@ router.get('/allUsersFinishedEvents', auth, async (req, res) => {
         finishedEvents: finishedEvents,  // Return only finished events for each user
       };
     });
-
     return res.status(200).json(usersWithFinishedEvents);
   } catch (err) {
     console.error(err.message);
     return res.status(500).send('Server error');
   }
 });
+
 

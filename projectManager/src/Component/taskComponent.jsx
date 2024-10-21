@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Typography, CardHeader, Popover, IconButton } from "@mui/material";
+import { Card, Typography, CardHeader, Popover, IconButton, Divider } from "@mui/material";
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import axios from 'axios';
@@ -98,16 +98,16 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
                 key={index}
                 variant="outlined"
                 sx={{
-                  maxWidth: 500,
                   bgcolor: color,
                   color: componentTextColor,
                   height: "100%",
                   marginBottom: 1,
                   padding: 2,
                   borderRadius: 2,
-                  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
                   '&:hover': {
-                    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                    transform: 'scale(1.03)', // Slight scale-up effect
+                    boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.3)', // Deeper shadow effect
                   },
                 }}
               >
@@ -118,9 +118,14 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
                     <IconButton aria-label="settings" onClick={(event) => handleSettingsClick(event, newEvent._id, newEvent.end)}>
                       <MoreVertIcon sx={{ color: '#4f4f4f' }} />
                     </IconButton>
+  
                   }
-                  title={newEvent.title}
-                  subheader={newEvent.start + " | " + newEvent.end}
+                  title={<Typography variant="subtitle1" sx={{ fontWeight: 'bold', fontSize: '0.8rem', color: componentTextColor }}>
+                  {newEvent.title}
+                </Typography>}
+                  subheader={ <Typography  variant="caption" sx={{ fontSize: '0.9rem', color: componentTextColor }}>
+                       {newEvent.start + " | " + newEvent.end}
+                  </Typography>}
                   subheaderTypographyProps={{ style: { color: '#4f4f4f', fontSize: '0.9rem' } }}
                 />
               </Card>

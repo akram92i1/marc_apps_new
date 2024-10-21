@@ -52,12 +52,13 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
                   bgcolor: '#e0f7e9', // Light green background to fit the white theme
                   color: '#4f4f4f',  // Gray text to fit the theme
                   height: "100%",
-                  marginBottom: 2,
+                  marginBottom: 1,
                   padding: 2,
                   borderRadius: 2,  // Smooth rounded corners
-                  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',  // Light shadow for a subtle 3D effect
+                  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
                   '&:hover': {
-                    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.15)',  // Slightly deeper shadow on hover
+                    transform: 'scale(1.03)', // Slight scale-up effect
+                    boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.3)', // Deeper shadow effect
                   },
                 }}
               >

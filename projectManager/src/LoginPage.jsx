@@ -1,73 +1,32 @@
 import React, { useState } from 'react';
-import {
-  Container, Box, TextField, Button, Typography, Avatar,
-  CssBaseline, Grid, Link, Alert
-} from '@mui/material';
+import { Container, Box, TextField, Button, Typography, Avatar, CssBaseline, Grid, Link, Alert } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useLayoutEffect } from 'react';
+
 
 const theme = createTheme();
 
-const LoginPage = ({ handleClickOpenSignup }) => {
+const LoginPage = ({handleClickOpenSignup}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate();
-
-  useLayoutEffect(() => {
-    const checkLoggedInUser = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        // No token found, user is not logged in
-        return;
-      }
-
-      try {
-        // Make a request to the backend to check if the user is authenticated
-        const response = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/auth/auth-check', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 200) {
-          // User is authenticated, navigate to the dashboard
-          console.log("User is authenticated");
-          navigate('/dashboard');
-        }
-      } catch (error) {
-        // If token is expired or invalid, remove it from localStorage
-        console.error("Authentication failed or token expired:", error);
-        localStorage.removeItem('token');
-        // Stay on the login page or handle as needed
-      }
-    };
-
-    checkLoggedInUser();
-  }, [navigate]);
-
+  const navigate = useNavigate(); // Initialize useNavigate hook
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-    setError('');
-
-    try {
-      const response = await axios.post('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/auth/login', { email, password });
-      const { token } = response.data;
-
-      // Store the token in localStorage
-      localStorage.setItem('token', token);
-
-      // Navigate to the dashboard
-      navigate('/dashboard');
-    } catch (err) {
-      setError(err.response?.data?.msg || "An error occurred during login");
+    setError('')
+    try{
+    const response  = await axios.post('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/auth/login', {email, password});
+    const {token} = response.data;
+    localStorage.setItem('token', token);
+    //handle successful login here (store token, redirect user)
+    navigate('/dashboard');
+    }catch(err){
+      setError(error.response?.data?.message || "An error occurred during login");
     } finally {
       setLoading(false);
     }
@@ -79,7 +38,10 @@ const LoginPage = ({ handleClickOpenSignup }) => {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center',
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -88,23 +50,41 @@ const LoginPage = ({ handleClickOpenSignup }) => {
           <Typography component="h1" variant="h5">
             Login
           </Typography>
-          {error && <Alert severity="error">{error}</Alert>}
+          {error && <Alert severity = "error">{error}</Alert>}
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
-              margin="normal" required fullWidth id="email" label="Email Address" name="email"
-              autoComplete="email" autoFocus value={email}
-              onChange={(e) => setEmail(e.target.value)} disabled={loading}
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled = {loading}
             />
             <TextField
-              margin="normal" required fullWidth name="password" label="Password" type="password"
-              id="password" autoComplete="current-password" value={password}
-              onChange={(e) => setPassword(e.target.value)} disabled={loading}
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled = {loading}
             />
             <Button
-              type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}
-              disabled={loading}
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
             >
-              {loading ? 'Logging in...' : 'Login'}
+             Login
             </Button>
             <Grid container>
               <Grid item xs>
@@ -113,8 +93,8 @@ const LoginPage = ({ handleClickOpenSignup }) => {
                 </Link>
               </Grid>
               <Grid item>
-                <Button variant="contained" onClick={handleClickOpenSignup}>
-                  Sign Up
+                <Button variant='contained' onClick={handleClickOpenSignup}  >
+                  SignUp
                 </Button>
               </Grid>
             </Grid>

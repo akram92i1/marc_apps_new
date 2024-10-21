@@ -230,91 +230,87 @@ export default function Home() {
         <div>
             <Navbar handleClickOpen={handleClickOpen} username={userInformations[0]} userImageUrl={userInformations[1]} />
             <Box sx={{ padding: 2 }}>
-                <Grid container spacing={6}>
-                    {/* Sidebar */}
-                    <Grid item xs={12} md={3} sx={{ height: '100%' }}>
-                        <Box sx={{
-                            background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)', elevation: 6
-                        }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
-                                <Typography>Statistiques</Typography>
-                            </Box>
-                            <Divider />
-                            <br />
-                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <BarsDataset></BarsDataset>
-                            </Box>
-                        </Box>
-                        <br />
-                        <Box sx={{
-                            background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)', elevation: 6
-                        }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
-                                <Typography>Messagerie instantanée</Typography>
-                            </Box>
-                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <ChatComponent></ChatComponent>
-                            </Box>
-                        </Box>
-                    </Grid>
+  <Grid container spacing={2} sx={{ width: '100%' }}>
+    {/* Sidebar */}
+    <Grid item xs={12} md={3} sx={{ height: '100%' }}>
+      <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
+          <Typography>Statistiques</Typography>
+        </Box>
+        <Divider />
+        <br />
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <BarsDataset />
+        </Box>
+      </Box>
+      <br />
+      <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
+          <Typography>Messagerie instantanée</Typography>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <ChatComponent />
+        </Box>
+      </Box>
+    </Grid>
 
-                    {/* Main Content */}
-                    <Grid item xs={12} md={6}>
-                        <Card sx={{ color: 'black', background: 'white' }}>
-                            <Box sx={{ background: '#dee2e6', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)', elevation: 6 }} >
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-                                        Calendrier
-                                    </Typography>
-                                    <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-                                        1er Janvier
-                                    </Typography>
-                                </Box>
-                                <Box sx={{ width: '100%', height: '100%' }}>
-                                    <MyCalendar events={events} onAddEvent={handleAddEvent} />
-                                </Box>
-                            </Box>
-                        </Card>
-                    </Grid>
+    {/* Main Content (Calendar) */}
+    <Grid item xs={12} md={6}>
+      <Card sx={{ color: 'black', background: 'white' }}>
+        <Box sx={{ background: '#dee2e6', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
+              Calendrier
+            </Typography>
+            <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
+              1er Janvier
+            </Typography>
+          </Box>
+          <Box sx={{ width: '100%', height: '100%' }}>
+            <MyCalendar events={events} onAddEvent={handleAddEvent} />
+          </Box>
+        </Box>
+      </Card>
+    </Grid>
 
-                    {/* Todo Bar */}
-                    <Grid item xs={12} md={2} sx={{ height: '100%', justifyContent: 'flex-end' }}>
-                        <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)', elevation: 6 }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'center' , marginBottom: 2  }}>
-                                Taches courante
-                            </Box>
-                            <Divider />
-                            <br />
-                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <MyCardtaskComponent allEvents={events} setEvents={setEvents} allFinishedEvents={completedTasks} setFinishedEvents={setCompletedTasks} />
-                            </Box>
-                        </Box>
-                        <br />
-                        <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)', elevation: 6 }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
-                                Taches Effectuer
-                            </Box>
-                            <Divider />
-                            <br />
-                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <MyFinishedTaskComponent allFinishedEvents={completedTasks} setFinishedEvents={setCompletedTasks} />
-                            </Box>
-                        </Box>
-                    </Grid>
-                     {/* Special Section - Only for special user */}
-                     {isSpecialUser && (
-                        <Grid item xs={12} md={12} sx={{ height: '100%', justifyContent: 'center', textAlign: 'center' }}>
-                            <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)', elevation: 6 }}>
-                                <p>Section spéciale pour l'utilisateur : marclavigne2020@gmail.com
-                                </p>
-                                <Divider />
-                                <br />
-                                <UsersTasksTable />
-                            </Box>
-                        </Grid>
-                    )}
-                </Grid>
-            </Box>
+    {/* Todo Bar */}
+    <Grid item xs={12} md={3} sx={{ height: '100%' }}>
+      <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
+          Taches courante
+        </Box>
+        <Divider />
+        <br />
+        <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1, width: '100%' }}>
+          <MyCardtaskComponent allEvents={events} setEvents={setEvents} allFinishedEvents={completedTasks} setFinishedEvents={setCompletedTasks} />
+        </Box>
+      </Box>
+      <br />
+      <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
+          Taches Effectuer
+        </Box>
+        <Divider />
+        <br />
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <MyFinishedTaskComponent allFinishedEvents={completedTasks} setFinishedEvents={setCompletedTasks} />
+        </Box>
+      </Box>
+    </Grid>
+
+    {/* Special Section - Only for special user */}
+    {isSpecialUser && (
+      <Grid item xs={12} md={12} sx={{ height: '100%', justifyContent: 'center', textAlign: 'center' }}>
+        <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)' }}>
+          <p>Section spéciale pour l'utilisateur : marclavigne2020@gmail.com</p>
+          <Divider />
+          <br />
+          <UsersTasksTable />
+        </Box>
+      </Grid>
+    )}
+  </Grid>
+</Box>
         </div>
     );
 }
