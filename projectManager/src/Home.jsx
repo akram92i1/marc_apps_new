@@ -235,7 +235,7 @@ export default function Home() {
                     <Grid item xs={12} md={3}>
                         <Box
                             sx={{
-                                backgroundImage: 'linear-gradient(135deg, #e2eafc 30%, #abc4ff 100%)', // Gradient from blue to white
+                                backgroundImage: 'linear-gradient(135deg, #e2eafc  80%, #abc4ff 100%)', // Gradient from blue to white
                                 padding: '5px',
                                 borderRadius: 1,
                                 boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)',
@@ -245,7 +245,7 @@ export default function Home() {
                                 },
                             }}
                         >
-                            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 7 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 4 }}>
                                 <Typography>Statistiques</Typography>
                             </Box>
                             <Divider sx={{ backgroundColor: '#ccc', height: '2px' }} /> {/* Thicker and lighter divider */}
@@ -256,7 +256,7 @@ export default function Home() {
                         <br />
                         <Box
                             sx={{
-                                backgroundImage: 'linear-gradient(135deg, #abc4ff 30%, #edf2fb 100%)', // Gradient from blue to white
+                                backgroundColor : "#edede8", 
                                 padding: '5px',
                                 borderRadius: 1,
                                 boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)',
@@ -279,7 +279,6 @@ export default function Home() {
                     <Grid item xs={12} md={6}>
                         <Box
                             sx={{
-                                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)', // Shadow effect around the entire Grid container
                                 borderRadius: 2, // Rounded corners
                                 padding: 2, // Padding inside the shadow box
                                 backgroundColor: 'white', // Ensure the background remains white
@@ -333,7 +332,7 @@ export default function Home() {
                         <br />
                         <Box
                             sx={{
-                                backgroundImage: 'linear-gradient(135deg, #90e0ef 30%, #ffffff 100%)', // Gradient from blue to white
+                                backgroundColor:"#b2f7ef" , 
                                 padding: '5px',
                                 borderRadius: 1,
                                 boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)',
@@ -359,7 +358,7 @@ export default function Home() {
                         <Grid item xs={12} md={12} sx={{ height: '100%', justifyContent: 'center', textAlign: 'center' }}>
                             <Box
                                 sx={{
-                                    backgroundImage: 'linear-gradient(135deg, #eff1ed 30%, #ffffff 100%)', // Gradient from blue to white
+                                    backgroundImage: 'linear-gradient(135deg, #eff1ed 70%, #ffffff 100%)', // Gradient from blue to white
                                     padding: '5px',
                                     borderRadius: 1,
                                     boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)',
