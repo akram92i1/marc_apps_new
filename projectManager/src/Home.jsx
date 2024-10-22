@@ -235,7 +235,7 @@ export default function Home() {
                     <Grid item xs={12} md={3}>
                         <Box
                             sx={{
-                                backgroundImage: 'linear-gradient(135deg, #e2eafc  80%, #abc4ff 100%)', // Gradient from blue to white
+                                backgroundImage: 'linear-gradient(135deg, #fefae0  40%, #fae1dd 80%)', // Gradient from blue to white
                                 padding: '5px',
                                 borderRadius: 1,
                                 boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)',
@@ -310,7 +310,7 @@ export default function Home() {
                     <Grid item xs={12} md={3}>
                         <Box
                             sx={{
-                                backgroundImage: 'linear-gradient(135deg, #90e0ef 30%, #ffffff 100%)', // Gradient from blue to white
+                                backgroundImage: 'linear-gradient(135deg, #fae1dd 30%, #ffffff 100%)', // Gradient from blue to white
                                 padding: '5px',
                                 borderRadius: 1,
                                 boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)',
