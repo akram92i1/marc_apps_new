@@ -15,7 +15,15 @@ const FinishedEventsSchema = new mongoose.Schema({
   completedTask_onTime:{type:String , required:false} , 
   completedTask_lateFinished : {type:String , required:false} ,
   
-})
+});
+
+
+const CompletedEventSchema = new mongoose.Schema({
+  taskId : {type: String , required: true} , 
+  month : {type: String , required:false} , 
+  completedTask_onTime:{type:String , required:true} , 
+  completedTask_lateFinished : {type:String , required:true} ,
+});
 
 const UserSchema = new mongoose.Schema({
   username: {type: String , required: true} , 

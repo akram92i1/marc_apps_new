@@ -199,7 +199,7 @@ router.get('/finishedEvents' , auth , async (req , res)=> {
   } 
 })
 
-router.post('/delete-event', (req, res) => {
+router.post('/delete-event', auth  ,(req, res) => {
   const eventId = req.body.eventId; // Get the event ID from the request body
   const userId = req.user.id;
 
@@ -218,7 +218,7 @@ router.post('/delete-event', (req, res) => {
     } 
   );
 });
-module.exports = router;
+
 
 
 // Get finished events for all users
@@ -248,4 +248,45 @@ router.get('/allUsersFinishedEvents', auth, async (req, res) => {
   }
 });
 
+router.post("/Completedevents", auth, async (req, res) => {
+  try {
+    const userId = req.user.id; // Get the user ID from the authentication token
+    const eventId = req.body.eventId; // Get the event ID from the request body
+    const { completedTask_onTime, completedTask_lateFinished } = req.body; // Get the additional attributes
 
+    // Find the user by ID
+    const user = await User.findById(userId).populate('finishedEvents');
+
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    // Find the event in the finishedEvents array
+    const finishedEvent = user.finishedEvents.find(event => event._id.toString() === eventId);
+
+    if (!finishedEvent) {
+      return res.status(404).json({ msg: 'Event not found in FinishedEvents' });
+    }
+
+    // Create a new entry in the CompletedEvents array
+    user.completedEvents.push({
+      taskId: finishedEvent.taskId,
+      month: finishedEvent.month,
+      completedTask_onTime, // Use the data provided in the request
+      completedTask_lateFinished, // Use the data provided in the request
+    });
+
+    // Remove the event from the FinishedEvents array
+    user.finishedEvents = user.finishedEvents.filter(event => event._id.toString() !== eventId);
+
+    // Save the user document with the changes
+    await user.save();
+
+    return res.status(200).json({ msg: 'Event moved to CompletedEvents successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+module.exports = router;
