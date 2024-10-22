@@ -13,22 +13,25 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom'; 
+
 const pages = ['Profile', 'Taches', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar({username , userImageUrl}) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const navigate = useNavigate();  // Initialize useNavigate for navigation
+  const navigate = useNavigate();  
+
   React.useEffect(()=> { 
   },[])
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
@@ -39,20 +42,23 @@ function Navbar({username , userImageUrl}) {
   };
 
   const handleLogout = () => {
-    // Clear the JWT token from localStorage
     localStorage.removeItem('token');
-    // Redirect to the login page
     navigate('/');
   }
 
   return (
-    <AppBar position="static" sx={{backgroundColor:"#ee6c4d"}}>
+    <AppBar position="static" sx={{
+      backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent dark background
+      backdropFilter: "blur(20px)", // Increase blur effect for a more intense blur
+      color: "white", // Text color
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)', // Soft shadow effect
+    }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: 'white' }} />
           <Typography
             variant="h6"
-              noWrap
+            noWrap
             component="a"
             href="#app-bar-with-responsive-menu"
             sx={{
@@ -61,7 +67,7 @@ function Navbar({username , userImageUrl}) {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: 'white',
               textDecoration: 'none',
             }}
           >
@@ -75,7 +81,7 @@ function Navbar({username , userImageUrl}) {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              sx={{ color: 'white' }}  // White color for the menu icon
             >
               <MenuIcon />
             </IconButton>
@@ -99,12 +105,12 @@ function Navbar({username , userImageUrl}) {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography textAlign="center" sx={{ color: 'black' }}>{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, color: 'white' }} />
           <Typography
             variant="h5"
             noWrap
@@ -117,7 +123,7 @@ function Navbar({username , userImageUrl}) {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: 'white',
               textDecoration: 'none',
             }}
           >
@@ -128,7 +134,7 @@ function Navbar({username , userImageUrl}) {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: 'white', display: 'block', fontWeight: 500 }}
               >
                 {page}
               </Button>
@@ -138,7 +144,7 @@ function Navbar({username , userImageUrl}) {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src={userImageUrl} />
+                <Avatar alt={username} src={userImageUrl} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -159,7 +165,7 @@ function Navbar({username , userImageUrl}) {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={setting === 'Logout' ? handleLogout : handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                  <Typography textAlign="center" sx={{ color: 'black' }}>{setting}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -169,4 +175,5 @@ function Navbar({username , userImageUrl}) {
     </AppBar>
   );
 }
+
 export default Navbar;

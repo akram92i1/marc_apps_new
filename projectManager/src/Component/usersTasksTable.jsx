@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import MUIDataTable from 'mui-datatables';
-import { Button, createTheme, ThemeProvider } from "@mui/material";
+import { Button, createTheme, ThemeProvider , Box } from "@mui/material";
 import axios from 'axios';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ReplayIcon from '@mui/icons-material/Replay';
 const UsersTasksTable = () => {
   const [data, setData] = useState([]); // State to hold the fetched data
 
@@ -26,6 +27,7 @@ const UsersTasksTable = () => {
             mail: user.email,
             tache: event.title,
             action: (
+              <Box sx={{ display: 'flex', gap: 2 }}>
               <Button 
                 variant="contained" 
                 color="success"
@@ -39,6 +41,21 @@ const UsersTasksTable = () => {
               >
                 Tâche vérifier
               </Button>
+
+              <Button 
+                variant="outlined" 
+                color="error"
+                endIcon={<ReplayIcon />}
+                sx={{ 
+                  borderRadius: '20px', 
+                  padding: '5px 15px',
+                  textTransform: 'none'
+                }}
+                onClick={() => redoTask(event._id)}
+              >
+                Tâche à refaire
+              </Button>
+            </Box>
             )
           }))
         );
@@ -99,6 +116,11 @@ const UsersTasksTable = () => {
     elevation: 0, // Remove elevation
     rowsPerPage: 10, // Default rows per page
     rowsPerPageOptions: [5, 10, 15], // Pagination options
+  };
+
+   const redoTask = (taskId) => {
+    console.log("Task to be redone:", taskId);
+    // You can implement further actions like making an API call to update the task status
   };
 
   const getMuiTheme = () =>

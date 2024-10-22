@@ -229,88 +229,155 @@ export default function Home() {
     return (
         <div>
             <Navbar handleClickOpen={handleClickOpen} username={userInformations[0]} userImageUrl={userInformations[1]} />
-            <Box sx={{ padding: 2 }}>
-  <Grid container spacing={2} sx={{ width: '100%' }}>
-    {/* Sidebar */}
-    <Grid item xs={12} md={3} sx={{ height: '100%' }}>
-      <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
-          <Typography>Statistiques</Typography>
-        </Box>
-        <Divider />
-        <br />
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <BarsDataset />
-        </Box>
-      </Box>
-      <br />
-      <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
-          <Typography>Messagerie instantanée</Typography>
-        </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <ChatComponent />
-        </Box>
-      </Box>
-    </Grid>
+            <Box sx={{ padding: 3 }}>
+                <Grid container spacing={2} sx={{ width: '100%' }}>
+                    {/* Sidebar */}
+                    <Grid item xs={12} md={3}>
+                        <Box
+                            sx={{
+                                backgroundImage: 'linear-gradient(135deg, #e2eafc 30%, #abc4ff 100%)', // Gradient from blue to white
+                                padding: '5px',
+                                borderRadius: 1,
+                                boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)',
+                                transition: 'transform 0.3s ease-in-out',
+                                '&:hover': {
+                                    transform: 'scale(1.05)', // Zoom-in effect
+                                },
+                            }}
+                        >
+                            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 7 }}>
+                                <Typography>Statistiques</Typography>
+                            </Box>
+                            <Divider sx={{ backgroundColor: '#ccc', height: '2px' }} /> {/* Thicker and lighter divider */}
+                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <BarsDataset />
+                            </Box>
+                        </Box>
+                        <br />
+                        <Box
+                            sx={{
+                                backgroundImage: 'linear-gradient(135deg, #abc4ff 30%, #edf2fb 100%)', // Gradient from blue to white
+                                padding: '5px',
+                                borderRadius: 1,
+                                boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)',
+                                transition: 'transform 0.3s ease-in-out',
+                                '&:hover': {
+                                    transform: 'scale(1.05)', // Zoom-in effect
+                                },
+                            }}
+                        >
+                            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
+                                <Typography>Messagerie instantanée</Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <ChatComponent />
+                            </Box>
+                        </Box>
+                    </Grid>
 
-    {/* Main Content (Calendar) */}
-    <Grid item xs={12} md={6}>
-      <Card sx={{ color: 'black', background: 'white' }}>
-        <Box sx={{ background: '#dee2e6', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-              Calendrier
-            </Typography>
-            <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-              1er Janvier
-            </Typography>
-          </Box>
-          <Box sx={{ width: '100%', height: '100%' }}>
-            <MyCalendar events={events} onAddEvent={handleAddEvent} />
-          </Box>
-        </Box>
-      </Card>
-    </Grid>
+                    {/* Main Content (Calendar) */}
+                    <Grid item xs={12} md={6}>
+                        <Box
+                            sx={{
+                                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)', // Shadow effect around the entire Grid container
+                                borderRadius: 2, // Rounded corners
+                                padding: 2, // Padding inside the shadow box
+                                backgroundColor: 'white', // Ensure the background remains white
+                                transition: 'transform 0.3s ease-in-out',
+                                '&:hover': {
+                                    transform: 'scale(1.05)', // Zoom-in effect
+                                },
+                            }}
+                        >
+                            <Card sx={{ color: 'black', background: 'white' }}>
+                                <Box sx={{ background: '#dee2e6', padding: '5px', borderRadius: 1 }}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
+                                            Calendrier
+                                        </Typography>
+                                        <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
+                                            1er Janvier
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ width: '100%', height: '100%' }}>
+                                        <MyCalendar events={events} onAddEvent={handleAddEvent} />
+                                    </Box>
+                                </Box>
+                            </Card>
+                        </Box>
+                    </Grid>
 
-    {/* Todo Bar */}
-    <Grid item xs={12} md={3} sx={{ height: '100%' }}>
-      <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
-          Taches courante
-        </Box>
-        <Divider />
-        <br />
-        <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1, width: '100%' }}>
-          <MyCardtaskComponent allEvents={events} setEvents={setEvents} allFinishedEvents={completedTasks} setFinishedEvents={setCompletedTasks} />
-        </Box>
-      </Box>
-      <br />
-      <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
-          Taches Effectuer
-        </Box>
-        <Divider />
-        <br />
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <MyFinishedTaskComponent allFinishedEvents={completedTasks} setFinishedEvents={setCompletedTasks} />
-        </Box>
-      </Box>
-    </Grid>
+                    {/* Todo Bar */}
+                    <Grid item xs={12} md={3}>
+                        <Box
+                            sx={{
+                                backgroundImage: 'linear-gradient(135deg, #90e0ef 30%, #ffffff 100%)', // Gradient from blue to white
+                                padding: '5px',
+                                borderRadius: 1,
+                                boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)',
+                                transition: 'transform 0.3s ease-in-out',
+                                '&:hover': {
+                                    transform: 'scale(1.05)', // Zoom-in effect
+                                },
+                            }}
+                        >
+                            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
+                                Tâches courante
+                            </Box>
+                            <Divider sx={{ backgroundColor: '#ccc', height: '2px' }} />
+                            <br />
+                            <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1, width: '100%' }}>
+                                <MyCardtaskComponent allEvents={events} setEvents={setEvents} allFinishedEvents={completedTasks} setFinishedEvents={setFinishedEvents} />
+                            </Box>
+                        </Box>
+                        <br />
+                        <Box
+                            sx={{
+                                backgroundImage: 'linear-gradient(135deg, #90e0ef 30%, #ffffff 100%)', // Gradient from blue to white
+                                padding: '5px',
+                                borderRadius: 1,
+                                boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)',
+                                transition: 'transform 0.3s ease-in-out',
+                                '&:hover': {
+                                    transform: 'scale(1.05)', // Zoom-in effect
+                                },
+                            }}
+                        >
+                            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
+                            Tâches Effectuer
+                            </Box>
+                            <Divider sx={{ backgroundColor: '#ccc', height: '2px' }} />
+                            <br />
+                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <MyFinishedTaskComponent allFinishedEvents={completedTasks} setFinishedEvents={setFinishedEvents} />
+                            </Box>
+                        </Box>
+                    </Grid>
 
-    {/* Special Section - Only for special user */}
-    {isSpecialUser && (
-      <Grid item xs={12} md={12} sx={{ height: '100%', justifyContent: 'center', textAlign: 'center' }}>
-        <Box sx={{ background: 'white', padding: '5px', borderRadius: 1, boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)' }}>
-          <p>Section spéciale pour l'utilisateur : marclavigne2020@gmail.com</p>
-          <Divider />
-          <br />
-          <UsersTasksTable />
-        </Box>
-      </Grid>
-    )}
-  </Grid>
-</Box>
+                    {/* Special Section - Only for special user */}
+                    {isSpecialUser && (
+                        <Grid item xs={12} md={12} sx={{ height: '100%', justifyContent: 'center', textAlign: 'center' }}>
+                            <Box
+                                sx={{
+                                    backgroundImage: 'linear-gradient(135deg, #eff1ed 30%, #ffffff 100%)', // Gradient from blue to white
+                                    padding: '5px',
+                                    borderRadius: 1,
+                                    boxShadow: '0 0 20px rgba(0, 0, 0, 0.4)',
+                                    transition: 'transform 0.3s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.01)', // Zoom-in effect
+                                    },
+                                }}
+                            >
+                                <p>Section spéciale pour l'utilisateur : marclavigne2020@gmail.com</p>
+                                <Divider sx={{ backgroundColor: '#ccc', height: '2px' }} />
+                                <br />
+                                <UsersTasksTable />
+                            </Box>
+                        </Grid>
+                    )}
+                </Grid>
+            </Box>
         </div>
     );
 }
