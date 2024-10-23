@@ -326,7 +326,7 @@ export default function Home() {
                             <Divider sx={{ backgroundColor: '#ccc', height: '2px' }} />
                             <br />
                             <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1, width: '100%' }}>
-                                <MyCardtaskComponent allEvents={events} setEvents={setEvents} allFinishedEvents={completedTasks} setFinishedEvents={setFinishedEvents} />
+                                <MyCardtaskComponent allEvents={events} setEvents={setEvents} allFinishedEvents={completedTasks} setCompletedTasks={setCompletedTasks} />
                             </Box>
                         </Box>
                         <br />
@@ -348,7 +348,7 @@ export default function Home() {
                             <Divider sx={{ backgroundColor: '#ccc', height: '2px' }} />
                             <br />
                             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <MyFinishedTaskComponent allFinishedEvents={completedTasks} setFinishedEvents={setFinishedEvents} />
+                                <MyFinishedTaskComponent allFinishedEvents={completedTasks} />
                             </Box>
                         </Box>
                     </Grid>

@@ -4,7 +4,7 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import axios from 'axios';
 
-const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinishedEvents }) => {
+const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setCompletedTasks }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedEventMonth, setSelectedEventMonth] = useState(null);
@@ -30,13 +30,13 @@ const MyCardtaskComponent = ({ allEvents, setEvents, allFinishedEvents, setFinis
         const response = await axios.get(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
-        setFinishedEvents(response.data);
+        setCompletedTasks(response.data);
       } catch (error) {
         console.error("Error fetching finished events:", error);
       }
     };
     fetchNewFinishedEvents();
-  }, [allEvents, setFinishedEvents]);
+  }, [allEvents]);
 
   const fetchUserId = async () => {
     try {

@@ -5,7 +5,7 @@ import FavoriteIcon from '@mui/icons-material/Task';
 import PendingActionsIcon from '@mui/icons-material/PendingActions'; // Icon for pending status
 import axios from 'axios';
 
-const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
+const MyFinishedTaskComponent = ({ allFinishedEvents }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   const fetchUserId = async () => {
@@ -20,20 +20,20 @@ const MyFinishedTaskComponent = ({ allFinishedEvents, setFinishedEvents }) => {
     }
   };
 
-  const handleTasktClick = async () => {
-    const eventTaskId = selectedEvent;
-    const userId = await fetchUserId();
-    try {
-      const token = localStorage.getItem('token');
-      await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents`, { taskId: selectedEvent }, {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
+  // const handleTasktClick = async () => {
+  //   const eventTaskId = selectedEvent;
+  //   const userId = await fetchUserId();
+  //   try {
+  //     const token = localStorage.getItem('token');
+  //     await axios.post(`https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/finishedEvents`, { taskId: selectedEvent }, {
+  //       headers: { 'Authorization': `Bearer ${token}` },
+  //     });
 
-      setFinishedEvents(allFinishedEvents.filter(event => event._id !== eventTaskId));
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  };
+  //     setFinishedEvents(allFinishedEvents.filter(event => event._id !== eventTaskId));
+  //   } catch (error) {
+  //     console.log("Error:", error);
+  //   }
+  // };
 
   return (
     <div>
