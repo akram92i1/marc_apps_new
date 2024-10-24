@@ -37,7 +37,7 @@ const UsersTasksTable = () => {
                   padding: '5px 15px',
                   textTransform: 'none'
                 }}
-                onClick={() => verifyTask(event._id)}
+                onClick={() => verifyTask(event._id , 'Tâche vérifier' )}
               >
                 Tâche vérifier
               </Button>
@@ -51,7 +51,7 @@ const UsersTasksTable = () => {
                   padding: '5px 15px',
                   textTransform: 'none'
                 }}
-                onClick={() => redoTask(event._id)}
+                onClick={() => redoTask(event._id , 'Tâche à refaire')}
               >
                 Tâche à refaire
               </Button>
@@ -70,10 +70,46 @@ const UsersTasksTable = () => {
   }, []);
 
   // Function to handle task verification button click
-  const verifyTask = (taskId) => {
+  const verifyTask = async (taskId, title) => {
     console.log("Task verified:", taskId);
-    // You can implement further actions like making an API call to update the task status
+    console.log("Task title:", title);
+  
+    try {
+      const token = localStorage.getItem('token'); // Retrieve JWT token
+  
+      // Step 1: Call the /eventDate endpoint to check the event status (LATE or ONTIME)
+      const eventDateResponse = await axios.get('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/eventDate', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        data: {
+          eventId: taskId,
+        }
+      });
+  
+      const status = eventDateResponse.data.status; // Get "LATE" or "ONTIME"
+  
+      // Step 2: Based on the status, prepare data for the second request
+      const data = {
+        eventId: taskId,
+        completedTask_onTime: status === "ONTIME" ? "true" : "false", // True if on time, false otherwise
+        completedTask_lateFinished: status === "LATE" ? "true" : "false" // True if late, false otherwise
+      };
+  
+      // Step 3: Call the /Completedevents endpoint to update the task status
+      const completeTaskResponse = await axios.post('https://semer-le-present-f32d8fb5ce8e.herokuapp.com/api/users/Completedevents', data, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+  
+      console.log("Task completion response:", completeTaskResponse.data);
+  
+    } catch (error) {
+      console.error("Error on processing completing tasks:", error);
+    }
   };
+  
 
   const columns = [
     {

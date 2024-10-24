@@ -189,7 +189,7 @@ export default function Home() {
     };
 
     const buildAllEventsData = (data) => {
-        const allDataUsers = [];
+        const allDataUsers = []; 
         // console.log("data", data);
         data.forEach((user) => {
             if (user.events && Array.isArray(user.events) && user.events.length > 0) {

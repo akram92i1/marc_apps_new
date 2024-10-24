@@ -260,10 +260,13 @@ router.post("/Completedevents", auth, async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: 'User not found' });
     }
+    console.log("Here is the eventId" ,eventId ) ;
+    console.log("Here is the completedTask_onTime" ,completedTask_onTime ) ;
+    console.log("Here is the completedTask_lateFinished" ,completedTask_lateFinished ) ;
 
     // Find the event in the finishedEvents array
-    const finishedEvent = user.finishedEvents.find(event => event._id.toString() === eventId);
-
+    const finishedEvent = user.finishedEvents.find(event => event.taskId.toString() === eventId);
+    console.log("Finished event " , finishedEvent) ; 
     if (!finishedEvent) {
       return res.status(404).json({ msg: 'Event not found in FinishedEvents' });
     }
@@ -277,14 +280,55 @@ router.post("/Completedevents", auth, async (req, res) => {
     });
 
     // Remove the event from the FinishedEvents array
-    user.finishedEvents = user.finishedEvents.filter(event => event._id.toString() !== eventId);
-
+    user.finishedEvents = user.finishedEvents.filter(event => event.taskId.toString() !== eventId);
+    // Remove the event from the Events array 
+    user.events = user.events.filter(event => event._id.toString() !== eventId) ; 
     // Save the user document with the changes
     await user.save();
 
     return res.status(200).json({ msg: 'Event moved to CompletedEvents successfully' });
   } catch (error) {
     console.error(error);
+    return res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+router.get("/eventDate", auth, async (req, res) => {
+  try {
+    const userId = req.user.id; // Get the user ID from the authentication token
+    const eventId = req.body.eventId; // Get the event id  
+
+    // Find the user by ID and populate events
+    const user = await User.findById(userId).populate('events');
+    
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    // Find the specific event by eventId
+    const event = user.events.find(event => event._id.toString() === eventId);
+
+    if (!event) {
+      return res.status(404).json({ msg: 'Event not found' });
+    }
+
+    // Get the end date of the event and the current date
+    const eventEndDate = new Date(event.end);
+    const currentDate = new Date();
+
+    // Calculate the difference in time (milliseconds)
+    const timeDifference = eventEndDate - currentDate;
+
+    // Return "LATE" if the event is in the past, otherwise "ONTIME"
+    if (timeDifference < 0) {
+      return res.status(200).json({ status: "LATE" });
+      
+    } else {
+      return res.status(200).json({ status: "ONTIME" });
+    }
+
+  } catch (error) {
+    console.error("Error fetching event date:", error);
     return res.status(500).json({ msg: 'Server error' });
   }
 });

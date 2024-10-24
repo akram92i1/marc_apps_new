@@ -20,7 +20,6 @@ const FinishedEventsSchema = new mongoose.Schema({
 
 const CompletedEventSchema = new mongoose.Schema({
   taskId : {type: String , required: true} , 
-  month : {type: String , required:false} , 
   completedTask_onTime:{type:String , required:true} , 
   completedTask_lateFinished : {type:String , required:true} ,
 });
@@ -31,7 +30,8 @@ const UserSchema = new mongoose.Schema({
   profilePic:{type:String , required:true} , 
   password: String,
   events : [EventSchema], 
-  finishedEvents : [FinishedEventsSchema]
+  finishedEvents : [FinishedEventsSchema] , 
+  completedEvents :[CompletedEventSchema]
 }, {timestamps:true} );
 
 
